@@ -1,0 +1,22 @@
+﻿﻿@using GamifyingTasks.Firebase.Authentication
+@using GamifyingTasks.Firebase.DB
+@inject NavigationManager navManger
+<MudNavMenu Dense="true" Color="Color.Info">
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.House" style="color: #E2C044;">Home
+    </MudNavLink>
+    <MudNavLink Href="profile" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person" style="color: #E2C044;">
+        profile
+    </MudNavLink>
+    <MudNavLink Href="settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings"
+        style="color: #E2C044;">
+        Settings</MudNavLink>
+        <MudNavLink @onclick="LogOut" Match="NavLinkMatch.Prefix"style="color: #E2C044;">Log Out</MudNavLink>
+</MudNavMenu>
+
+@code{
+    private void LogOut(){
+        FirebaseAuth.GetClient().SignOut();
+        DBCore.IsLoggedIn = false;
+        navManger.NavigateTo("/");
+    }
+}

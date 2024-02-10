@@ -1,0 +1,22 @@
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS BUILD
+WORKDIR /src
+COPY ["GamifyingTasks.csproj", "."]
+RUN dotnet restore "GamifyingTasks.csproj"
+COPY . .
+RUN dotnet build "GamifyingTasks.csproj" -c Relase -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "GamifyingTasks.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENV ASPNETCORE_ENVIRONMENT Development
+ENV GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+ENTRYPOINT ["dotnet", "GamifyingTasks.dll"]

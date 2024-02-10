@@ -1,0 +1,61 @@
+﻿@inherits LayoutComponentBase
+@using GamifyingTasks.Firebase.DB
+<MudLayout>
+    
+    <MudAppBar Elevation="0">
+        @if(DBCore.IsLoggedIn){
+         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+    }
+   
+    </MudAppBar>
+        @if(DBCore.IsLoggedIn){
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Color="Color.Primary">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6" Color="Color.Info">HonsProject</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    }
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mb-3">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+<MudThemeProvider Theme="CustomTheme" />
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+<Fluxor.Blazor.Web.StoreInitializer />
+
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+
+    }
+
+    MudTheme CustomTheme = new MudTheme(){
+        Palette = new Palette(){
+            Primary = "#1E2019",
+            Secondary = "#587B7F",
+            AppbarBackground = "#E2C044",
+            TextPrimary = "#1E2019",
+            Background = "#393E41",
+            Surface = "#D3D0CB",
+            Info = "#E2C044"
+        },
+        Typography = new Typography(){
+            Body2 = new Body2(){
+                FontFamily = new[] {"Roboto"},
+                FontSize=".75rem",
+                FontWeight = 500,
+                LineHeight = 1.6,
+                LetterSpacing = ".0075em"
+            }
+        }
+    };
+}

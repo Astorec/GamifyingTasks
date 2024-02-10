@@ -1,0 +1,138 @@
+﻿@page "/home"
+
+@using Google.Cloud.Firestore
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Pages.Components
+@using GamifyingTasks.Interfaces
+@inject IDialogService DialogService
+@inject NavigationManager navManger
+
+<MudMainContent>
+    <div class="d-flex align-start justify-center" Width="575px">
+        <MudGrid Spacing="2">
+            <MudItem xs="12" xl="30">
+                <MudPaper Elevation="1">
+                    <MudCard>
+                        <MudCardContent class="d-flex flex-grow-1">
+                            <MudGrid class="flex-grow-1">
+                                <MudItem xs="12" xl="20"
+                                    class="d-flex flex-column flex-grow-1 align-center justify-center">
+                                    <div class="d-flex">
+                                        <MudImage Src="@DBCore.CurrentUser().Info.PhotoUrl"
+                                            class="mud-theme-primary rounded-circle col-span-1" Width="95"
+                                            Height="95" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <MudText Align="Align.Center" Color="Color.Primary">
+                                            <b>@DBCore.CurrentUser().Info.DisplayName</b>
+                                        </MudText>
+                                    </div>
+
+                                </MudItem>
+                                <MudItem xs="12" xl="12">
+                                    <div class="d-flex justify-content-between">
+                                        <MudText class="align-content-start flex-grow-1" Typo="Typo.subtitle1"
+                                            Color="Color.Primary">
+                                            <b>Level - @DBCore.CurrentLocalUser.Level</b>
+                                        </MudText>
+                                        <MudText class="align-content-end pl-16" Typo="Typo.subtitle1"
+                                            Color="Color.Primary">
+                                            <b>@DBCore.CurrentLocalUser.Exp/@DBCore.CurrentLocalUser.requiredExp EXP</b>
+                                        </MudText>
+                                    </div>
+                                    <div>
+                                        <MudProgressLinear Color="Color.Info" Size="Size.Large" Value="@progress">
+                                            <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+                                                <b>@progress%</b>
+                                            </MudText>
+                                        </MudProgressLinear>
+                                    </div>
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudPaper>
+
+            </MudItem>
+            <MudItem xs="6" xl="15">
+                <TodaysTasksComponent @ref="todaysTasksComponent" TaskUpdated="@TasksUpdated" />
+            </MudItem>
+            <MudItem xs="6" xl="15">
+                <UpcomingTasksComponent @ref="upcomingTasksComponent" TaskUpdated="@TasksUpdated" />
+            </MudItem>
+            <MudItem xs="12" xl="30">
+                <MudCard>
+                    <MudCardContent class="d-flex flex-grow-1">
+                        <div>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+                <div class="d-flex justify-end">
+                    <AddIconComponent TaskAdded="@TaskAdded" />
+                </div>
+            </MudItem>
+        </MudGrid>
+
+
+
+    </div>
+
+
+</MudMainContent>
+
+<style>
+    .popup-style {
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+@code {
+    private UpcomingTasksComponent upcomingTasksComponent;
+    private TodaysTasksComponent todaysTasksComponent;
+    private bool loading = true;
+    private int progress = 0;
+
+    private FirestoreDb db = DBCore.GetDBInstance();
+    protected override async Task OnInitializedAsync()
+    {
+        if (DBCore.CurrentUser() == null)
+        {
+            navManger.NavigateTo("/");
+        }
+    }
+    private string _menuConfirmText = "Confirm";
+
+
+    private void TasksUpdated(bool hasUpdated)
+    {
+        StateHasChanged();
+    }
+
+    private async Task TaskAdded(bool taskAdded)
+    {
+        await todaysTasksComponent.RefreshTaskList();
+        await upcomingTasksComponent.RefreshTaskList();
+        StateHasChanged();
+    }
+
+    private async Task TaskCompleted(bool TaskCompleted)
+    {
+        UpdateProgress();
+        await todaysTasksComponent.RefreshTaskList();
+        await upcomingTasksComponent.RefreshTaskList();
+        StateHasChanged();
+    }
+
+    private void UpdateProgress()
+    {
+        int fraction = DBCore.LoggedInUser().Exp / DBCore.LoggedInUser().requiredExp;
+
+        progress = fraction * 100;
+
+        if (progress >= 100)
+        {
+            progress = 100;
+        }
+    }
+}
