@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EqSUu/1MAV+qc0S4XrTTGMvgWW7Y8N0waKVoa1mu6wmBtDaC03/wumnr18A/K7VJdEQGHviRHtSpVhRJa8t6aQ==",
+  "dgSpecHash": "peeJyBSw5QaXoztZZSNnOeCaYdTF55gWtHegpEJMxSOpr4v/mLpedRo7udOojOr3stiopu6Fr2MSBsUyEYzOqQ==",
   "success": true,
-  "projectFilePath": "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/GamifyingTasks.csproj",
+  "projectFilePath": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj",
   "expectedPackageFiles": [
     "/home/astorec/.nuget/packages/firebaseadmin/2.4.0/firebaseadmin.2.4.0.nupkg.sha512",
     "/home/astorec/.nuget/packages/firebaseauthentication.net/4.1.0/firebaseauthentication.net.4.1.0.nupkg.sha512",

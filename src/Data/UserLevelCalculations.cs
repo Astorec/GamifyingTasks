@@ -31,6 +31,7 @@ namespace GamifyingTasks.Data
         public static async Task TaskCompleted(Tasks completedTask)
         {
             CalculateEXP(completedTask.Difficulty);
+            
             await DBCore.UpdateUser(DBCore.CurrentLocalUser);
         }
 

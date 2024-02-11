@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/GamifyingTasks.csproj": {}
+    "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj": {}
   },
   "projects": {
-    "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/GamifyingTasks.csproj": {
+    "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/GamifyingTasks.csproj",
+        "projectUniqueName": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj",
         "projectName": "GamifyingTasks",
-        "projectPath": "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/GamifyingTasks.csproj",
+        "projectPath": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj",
         "packagesPath": "/home/astorec/.nuget/packages/",
-        "outputPath": "/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/obj/",
+        "outputPath": "/home/astorec/Documents/Repos/GamifyingTasks/src/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/astorec/.nuget/NuGet/NuGet.Config"
@@ -20,7 +20,6 @@
           "net6.0"
         ],
         "sources": {
-          "/usr/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

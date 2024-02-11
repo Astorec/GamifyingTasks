@@ -167,7 +167,6 @@ namespace GamifyingTasks.Firebase.DB
                 {
                     var user = new Users
                     {
-                        Uid = doc.Id,
                         UserName = doc.GetValue<string>("UserName"),
                         Email = doc.GetValue<string>("Email"),
                         DayReg = doc.GetValue<Timestamp>("DayReg")
@@ -277,6 +276,14 @@ namespace GamifyingTasks.Firebase.DB
                 await docRef.UpdateAsync(updates);
             }
         }
+
+        public static async Task UpdateTask(Tasks taskToUpdate)
+        {
+            // TODO Make this method update the task via the firebase Doc Ref and allow it to update the task to Completed = True
+            // this might require some extra information being stored on the obj including the Doc ID when we store it on the DB
+            // so that we can search for that. Where the task is added we need to get it store the new DOC ID at the same time so
+            // that we can call it for useful information for querying later. 
+        }
         public static Dictionary<string, Tasks> GetUsersTodayTasks()
         {
             if (m_todayTasks == null)
@@ -318,7 +325,9 @@ namespace GamifyingTasks.Firebase.DB
         public static void SetCurrentUser(User user)
         {
             m_currentUser = user;
-            CurrentLocalUser = m_allUsers.Where(x => x.Value.Uid == user.Uid).FirstOrDefault().Value;
+            CurrentLocalUser = m_allUsers.Where(x => x.Value.UserName == user.Info.DisplayName).FirstOrDefault().Value;
+
+            CurrentLocalUser.Uid = user.Uid;
         }
 
         public static User CurrentUser()
