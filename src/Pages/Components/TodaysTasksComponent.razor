@@ -119,7 +119,7 @@
                                     </MudButton>
                                     <div class="d-flex align-end">
                                         <MudButtonGroup>
-                                            <MudButton Variant="Variant.Filled" Size="Size.Small"
+                                            <MudButton @onclick="() => CompleteTask(task.Value)" Variant="Variant.Filled" Size="Size.Small"
                                              Style="@($"background:{Colors.Green.Lighten1};")">
                                                 Confirm</MudButton>
                                             <MudButton Variant="Variant.Filled"

@@ -20,7 +20,10 @@ namespace GamifyingTasks.Firebase.DB
         private static Dictionary<string, Tasks> m_allTasks = new Dictionary<string, Tasks>();
         private static Dictionary<string, Tasks> m_todayTasks = new Dictionary<string, Tasks>();
         private static Dictionary<string, Tasks> m_upcomingTasks = new Dictionary<string, Tasks>();
+        private static Dictionary<string, Tasks> m_completedTasks = new Dictionary<string, Tasks>();
         private static Dictionary<string, Tasks> m_userTasks = new Dictionary<string, Tasks>();
+        private static Dictionary<string, Reminders> m_userReminders = new Dictionary<string, Reminders>();
+        private static Dictionary<string, Events> m_userEvents = new Dictionary<string, Events>();
         private static Dictionary<string, Users> m_allUsers = new Dictionary<string, Users>();
         private static User m_currentUser;
 
@@ -52,6 +55,7 @@ namespace GamifyingTasks.Firebase.DB
             if (IsSetup)
                 IsSetup = false;
 
+
             CollectionReference coll = GetDBInstance().Collection("tasks");
             QuerySnapshot docs = await coll.GetSnapshotAsync();
 
@@ -78,7 +82,9 @@ namespace GamifyingTasks.Firebase.DB
                     // If the task due date is set today's date or if it hits our default value that was created
                     // when the user didn't opt to add a date, add it to the Today's Task list.
                     if (task.DueDate.ToDateTime().Date == DateTime.UtcNow.Date ||
-                    task.DueDate.ToDateTime().Date == new DateTime(9999, 12, 31).ToUniversalTime().Date)
+                    task.DueDate.ToDateTime().Date == new DateTime(9999, 12, 31).ToUniversalTime().Date
+                    && !task.Completed
+                    && task.UserId == DBCore.CurrentLocalUser.Uid)
                     {
                         if (m_todayTasks == null)
                             m_todayTasks = new Dictionary<string, Tasks>();
@@ -88,7 +94,9 @@ namespace GamifyingTasks.Firebase.DB
 
                     // Else if the task due date is greater than or equal to Today's date add it to the upcoming
                     // task list
-                    else if (task.DueDate.ToDateTime().Date >= DateTime.UtcNow.AddDays(1).Date)
+                    else if (task.DueDate.ToDateTime().Date >= DateTime.UtcNow.AddDays(1).Date
+                     && task.UserId == DBCore.CurrentLocalUser.Uid
+                     && !task.Completed)
                     {
                         if (m_upcomingTasks == null)
                             m_upcomingTasks = new Dictionary<string, Tasks>();
@@ -98,13 +106,17 @@ namespace GamifyingTasks.Firebase.DB
                     // Else if the Due date is less than Today's date and the task is also not completed
                     // we add it to Today's tasks and when the front end code handles the task to display
                     // as a different colour
-                    else if (task.DueDate.ToDateTime().Date < DateTime.UtcNow.Date && !task.Completed)
+                    else if (task.DueDate.ToDateTime().Date < DateTime.UtcNow.Date && !task.Completed
+                     && task.UserId == DBCore.CurrentLocalUser.Uid)
                     {
                         if (m_todayTasks == null)
                             m_todayTasks = new Dictionary<string, Tasks>();
                         m_todayTasks.Add(uid, task);
                     }
-
+                    else if (task.Completed && task.UserId == DBCore.CurrentLocalUser.Uid)
+                    {
+                        m_completedTasks.Add(uid, task);
+                    }
                 }
             }
 
@@ -118,11 +130,41 @@ namespace GamifyingTasks.Firebase.DB
             return m_allTasks;
         }
 
+        public static async Task<Dictionary<string, Events>> GetEvents()
+        {
+
+            CollectionReference coll = GetDBInstance().Collection("tasks");
+            QuerySnapshot docs = await coll.GetSnapshotAsync();
+            foreach (var doc in docs)
+            {
+                var uid = doc.Id;
+                if (!m_allTasks.TryGetValue(uid, out var existingTask) && doc.GetValue<string>("UserId") == m_currentUser.Uid)
+                {
+                    Events eventToAdd = new Events{
+                        UserId = m_currentUser.Uid,
+                        EventName = doc.GetValue<string>("EventName"),
+                        EventLocation = doc.GetValue<string>("EventLocation"),
+                        EventDate = doc.GetValue<Timestamp>("EventDate")
+                    };
+                    m_userEvents.Add(uid, eventToAdd);
+                }
+            }
+
+            return m_userEvents;
+
+        }
         public static async Task AddNewTask(Tasks task)
         {
             await m_dbInstance.Collection("tasks").AddAsync(task);
             HasUpdated = true;
             await GetAllTasks();
+        }
+
+        public static async Task AddNewEvent(Events newEvent)
+        {
+            await m_dbInstance.Collection("Events").AddAsync(newEvent);
+            HasUpdated = true;
+            await GetEvents();
         }
 
         public static async Task DeleteTask(string uid)
@@ -260,20 +302,24 @@ namespace GamifyingTasks.Firebase.DB
         }
         public static async Task UpdateUser(Users user)
         {
-            DocumentReference docRef = m_dbInstance.Collection("Users").Document(user.Uid);
-
-            m_allUsers[user.Uid] = user;
-            Dictionary<string, object> updates = new Dictionary<string, object>
+            var coll = m_dbInstance.Collection("Users");
+            QuerySnapshot docs = await coll.GetSnapshotAsync();
+            foreach (var doc in docs.Documents)
             {
-                {"Exp", user.Exp},
-                {"Level", user.Level},
-                {"RequiredExp", user.requiredExp}
-            };
-            DocumentSnapshot snap = await docRef.GetSnapshotAsync();
+                if (doc.GetValue<string>("UserName") == user.UserName)
+                {
+                    m_allUsers[doc.GetValue<string>("Uid")] = user;
+                    Dictionary<string, object> updates = new Dictionary<string, object>
+                    {
+                        {"Exp", user.Exp},
+                        {"Level", user.Level},
+                        {"RequiredExp", user.requiredExp}
+                    };
 
-            if (snap.Exists)
-            {
-                await docRef.UpdateAsync(updates);
+                    await doc.Reference.UpdateAsync(updates);
+
+                    break;
+                }
             }
         }
 
@@ -283,6 +329,25 @@ namespace GamifyingTasks.Firebase.DB
             // this might require some extra information being stored on the obj including the Doc ID when we store it on the DB
             // so that we can search for that. Where the task is added we need to get it store the new DOC ID at the same time so
             // that we can call it for useful information for querying later. 
+
+            var coll = m_dbInstance.Collection("tasks");
+            QuerySnapshot docs = await coll.GetSnapshotAsync();
+
+            foreach (var doc in docs)
+            {
+                // This should be the case anyway as we set this up when we load up the application
+                // but the if statment ensure that this is 100% the case
+                if (doc.GetValue<string>("UserId") == CurrentLocalUser.Uid)
+                {
+                    if (m_todayTasks.TryGetValue(doc.Id, out var docExists))
+                        m_todayTasks.Remove(doc.Id);
+                    else
+                        m_upcomingTasks.Remove(doc.Id);
+
+                    m_completedTasks.Add(doc.Id, taskToUpdate);
+                    break;
+                }
+            }
         }
         public static Dictionary<string, Tasks> GetUsersTodayTasks()
         {

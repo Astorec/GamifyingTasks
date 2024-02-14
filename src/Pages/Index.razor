@@ -56,18 +56,14 @@
 
             </MudItem>
             <MudItem xs="6" xl="15">
-                <TodaysTasksComponent @ref="todaysTasksComponent" TaskUpdated="@TasksUpdated" TaskCompleted="@TaskCompleted" />
+                <TodaysTasksComponent @ref="todaysTasksComponent" TaskUpdated="@TasksUpdated"
+                    TaskCompleted="@TaskCompleted" />
             </MudItem>
             <MudItem xs="6" xl="15">
                 <UpcomingTasksComponent @ref="upcomingTasksComponent" TaskUpdated="@TasksUpdated" />
             </MudItem>
             <MudItem xs="12" xl="30">
-                <MudCard>
-                    <MudCardContent class="d-flex flex-grow-1">
-                        <div>
-                        </div>
-                    </MudCardContent>
-                </MudCard>
+               <EventsAndRemindersComponent/>
                 <div class="d-flex justify-end">
                     <AddIconComponent TaskAdded="@TaskAdded" />
                 </div>
@@ -91,15 +87,17 @@
     private UpcomingTasksComponent upcomingTasksComponent;
     private TodaysTasksComponent todaysTasksComponent;
     private bool loading = true;
-    private int progress = 0;
+    private double progress;
 
     private FirestoreDb db = DBCore.GetDBInstance();
     protected override async Task OnInitializedAsync()
     {
+        progress = DBCore.CurrentLocalUser.Exp;
         if (DBCore.CurrentUser() == null)
         {
             navManger.NavigateTo("/");
         }
+        StateHasChanged();
     }
     private string _menuConfirmText = "Confirm";
 
@@ -126,13 +124,13 @@
 
     private void UpdateProgress()
     {
-        int fraction = DBCore.LoggedInUser().Exp / DBCore.LoggedInUser().requiredExp;
+        // Calculate accurate progress fraction
+        float fraction = Math.Min(DBCore.CurrentLocalUser.Exp / (float)DBCore.CurrentLocalUser.requiredExp, 1f);
 
-        progress = fraction * 100;
-
-        if (progress >= 100)
-        {
-            progress = 100;
+        progress = Math.Round(fraction * 100, 0); // Round to the nearest whole number after calculation
+        if(progress >= 100){
+            progress = 0;
         }
+        StateHasChanged();
     }
 }

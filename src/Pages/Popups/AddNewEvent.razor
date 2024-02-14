@@ -3,19 +3,13 @@
 @using GamifyingTasks.Firebase.DB
 <MudDialog>
     <DialogContent>
-        <MudTextField T="string" Label="Task Name" @bind-Value="nameTxt" Required="true"
+        <MudTextField T="string" Label="Event Name" @bind-Value="nameTxt" Required="true"
             RequiredError="Field can't be empty" />
-        <MudTextField T="string" Label="Task Description" @bind-Value="descTxt" AutoGrow Lines="5" Required="true"
+        <MudTextField T="string" Label="Event Location" @bind-Value="locationTxt" AutoGrow Lines="5" Required="true"
             RequiredError="Field can't be empty" />
-        <MudSelect T="string" Label="Task Difficulty" AnchorOrigin="Origin.BottomCenter" @bind-Value="difficultyTxt"
-            Required="true" RequiredError="Select a Difficulty">
-            <MudSelectItem Value="@("Easy")" />
-            <MudSelectItem Value="@("Medium")" />
-            <MudSelectItem Value="@("Hard")" />
-            <MudSelectItem Value="@("Extra Hard")" />
-        </MudSelect>
-        <MudSwitch @bind-Value="@hasDueDate" Colour="Color.Info" Label="Toggle Due Date" />
-        <MudDatePicker @ref="_picker" label="Select Date" @bind-Date="date" Disabled="@hasDueDate">
+        <MudTextField T="string" Label="Event Description" @bind-Value="descTxt" AutoGrow Lines="5" Required="true"
+            RequiredError="Field can't be empty" />
+        <MudDatePicker @ref="_picker" label="Select Date" @bind-Date="date">
             <PickerActions>
                 <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
                 <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
@@ -39,30 +33,26 @@
 
     private async Task Submit()
     {
-        if (nameTxt != null && descTxt != null && difficultyTxt != null)
+        if (nameTxt != null && descTxt != null && locationTxt != null)
         {
 
-            Tasks task = new Tasks
+            Events newEvent = new Events
                 {
-                    Name = nameTxt,
+                    EventName = nameTxt,
                     Description = descTxt,
-                    Difficulty = difficultyTxt,
+                    EventLocation = locationTxt,
                     UserId = DBCore.CurrentLocalUser.Uid
                 };
 
-            if (!hasDueDate && date.HasValue)
-            {
-                task.SetDueDate(date.Value.ToUniversalTime());
-            }
-
-            else
-                task.SetDueDate(new DateTime(9999, 12, 31).ToUniversalTime());
-            await DBCore.AddNewTask(task);
+                
+                newEvent.SetEventDate(date.Value.ToUniversalTime());
+            
+            await DBCore.AddNewEvent(newEvent);
             MudDialog.Close(DialogResult.Ok(true));
         }
     }
     void Cancel() => MudDialog.Cancel();
     public string nameTxt;
     public string descTxt;
-    public string difficultyTxt;
+    public string locationTxt;
 }

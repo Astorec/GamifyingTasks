@@ -3,6 +3,7 @@
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
 @using GamifyingTasks.Pages.Popups
+@using GamifyingTasks.Data
 @inject IDialogService DialogService
 @inject NavigationManager navManger
 <MudPaper Elevation="1" Height="430px">
@@ -35,15 +36,16 @@
                                     @foreach (var task in upcomingTasks)
                                     {
                                       @if (task.Value.DueDate.ToDateTime().Date != new DateTime(9999, 12,
-                                        31).ToUniversalTime().Date  && task.Value.DueDate.ToDateTime().Date  >= DateTime.UtcNow.AddDays(1).Date)
+                                        31).ToUniversalTime().Date  && task.Value.DueDate.ToDateTime().Date  >= DateTime.UtcNow.AddDays(1).Date
+                                        && !task.Value.Completed)
                                         {     
                                         <MudGrid class="mt-1">
                                             <MudItem xs="3">
                                                 <MudPaper class="d-flex d-sm-none align-center justify-center mt-1 ml-2"
                                                     Elevation="0">
-                                                    <MudButton Variant="Variant.Text" Typo="Typo.body2" @onclick="() => ToggleViewDetails(task.Value)">
-                                                        <MudText>
-                                                           @task.Value.Name
+                                                      <MudButton Variant="Variant.Text" @onclick="() => ToggleViewDetails(task.Value)">
+                                                        <MudText Typo="Typo.body2">
+                                                            @task.Value.Name
                                                         </MudText>
                                                         <MudPopover Open="@(SelectedTask == task.Value && viewTask)"
                                                             OverflowBehavior="OverflowBehavior.FlipAlways"
@@ -147,7 +149,9 @@
                 </MudPaper>
 @code {
     [Parameter]
-                public EventCallback<bool> TaskUpdated {get; set;}
+    public EventCallback<bool> TaskUpdated {get; set;}
+                         [Parameter]
+                    public EventCallback<bool> TaskCompleted{get; set;}
     private bool loading = true;
       private bool viewTask = false;
       public bool viewAddButtons = false;
@@ -211,6 +215,14 @@
 
          Console.WriteLine(viewAddButtons);
     }
+
+
+    public async Task CompleteTask(Tasks task)
+    {
+        await UserLevelCaluclations.TaskCompleted(task);
+        await TaskCompleted.InvokeAsync(true);
+    }
+
     public async Task DeleteTask(string uid)
     {
         await DBCore.DeleteTask(uid);

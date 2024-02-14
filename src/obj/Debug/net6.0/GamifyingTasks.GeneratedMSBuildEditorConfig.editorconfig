@@ -43,6 +43,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewEvent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld0V2ZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewReminder.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld1JlbWluZGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewTask.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld1Rhc2sucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

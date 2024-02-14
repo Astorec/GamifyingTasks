@@ -10,5 +10,7 @@ namespace GamifyingTasks.Classes
         public string ReminderName { get; set; }
         [FirestoreProperty]
         public string Description { get; set; }
+        [FirestoreProperty]
+        public Timestamp ReminderDate {get; set;}
     }
 }

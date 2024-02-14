@@ -24,14 +24,18 @@ namespace GamifyingTasks.Data
                     break;
             }
 
-            if (DBCore.CurrentLocalUser.Exp >= DBCore.CurrentLocalUser.requiredExp)
+            if (DBCore.CurrentLocalUser.Exp >= DBCore.CurrentLocalUser.requiredExp){
+
                 DBCore.CurrentLocalUser.Level = DBCore.CurrentLocalUser.Level + 1;
+                DBCore.CurrentLocalUser.requiredExp = DBCore.CurrentLocalUser.requiredExp + 150;
+                DBCore.CurrentLocalUser.Exp = 0;
+            }
         }
 
         public static async Task TaskCompleted(Tasks completedTask)
         {
             CalculateEXP(completedTask.Difficulty);
-            
+            await DBCore.UpdateTask(completedTask);
             await DBCore.UpdateUser(DBCore.CurrentLocalUser);
         }
 
