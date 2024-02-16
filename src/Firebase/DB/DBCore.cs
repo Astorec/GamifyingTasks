@@ -1,5 +1,6 @@
 using System.Data.Common;
 using FirebaseAdmin;
+using Google.Apis.Firebasestorage;
 using Firebase.Auth;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
@@ -7,6 +8,9 @@ using Google.Cloud.Firestore.V1;
 using GamifyingTasks.Classes;
 using Microsoft.VisualBasic;
 using System.Diagnostics.CodeAnalysis;
+using Google.Apis.Util;
+using Microsoft.AspNetCore.Components.Forms;
+using Firebase.Storage;
 namespace GamifyingTasks.Firebase.DB
 {
     public static class DBCore
@@ -44,6 +48,8 @@ namespace GamifyingTasks.Firebase.DB
                 ProjectId = "hons-project-f5a1e",
             });
 
+
+
             IsSetup = true;
         }
         #endregion
@@ -69,6 +75,7 @@ namespace GamifyingTasks.Firebase.DB
                 {
                     var task = new Tasks
                     {
+                        UID = uid,
                         Name = doc.GetValue<string>("Name"),
                         Description = doc.GetValue<string>("Description"),
                         UserId = doc.GetValue<string>("UserId"),
@@ -133,15 +140,17 @@ namespace GamifyingTasks.Firebase.DB
         public static async Task<Dictionary<string, Events>> GetEvents()
         {
 
-            CollectionReference coll = GetDBInstance().Collection("tasks");
+            CollectionReference coll = GetDBInstance().Collection("Events");
             QuerySnapshot docs = await coll.GetSnapshotAsync();
             foreach (var doc in docs)
             {
                 var uid = doc.Id;
                 if (!m_allTasks.TryGetValue(uid, out var existingTask) && doc.GetValue<string>("UserId") == m_currentUser.Uid)
                 {
-                    Events eventToAdd = new Events{
-                        UserId = m_currentUser.Uid,
+                    Events eventToAdd = new Events
+                    {
+                        UID = uid,
+                        UserId = doc.GetValue<string>("UserId"),
                         EventName = doc.GetValue<string>("EventName"),
                         EventLocation = doc.GetValue<string>("EventLocation"),
                         EventDate = doc.GetValue<Timestamp>("EventDate")
@@ -155,14 +164,17 @@ namespace GamifyingTasks.Firebase.DB
         }
         public static async Task AddNewTask(Tasks task)
         {
-            await m_dbInstance.Collection("tasks").AddAsync(task);
+            var docRef = await m_dbInstance.Collection("tasks").AddAsync(task);
+            await docRef.UpdateAsync("UID", docRef.Id);
+
             HasUpdated = true;
             await GetAllTasks();
         }
 
         public static async Task AddNewEvent(Events newEvent)
         {
-            await m_dbInstance.Collection("Events").AddAsync(newEvent);
+            var docRef = await m_dbInstance.Collection("Events").AddAsync(newEvent);
+            await docRef.UpdateAsync("UID", docRef.Id);
             HasUpdated = true;
             await GetEvents();
         }
@@ -276,7 +288,7 @@ namespace GamifyingTasks.Firebase.DB
                 case TaskType.Today:
                     if (m_todayTasks != null)
                     {
-                        var filtter = m_todayTasks.Where(x => x.Value.UserId == m_currentUser.Uid);
+                        var filtter = m_todayTasks.Where(x => x.Value.UserId == CurrentLocalUser.Uid);
                         return filtter.ToDictionary(x => x.Key, x => x.Value);
                     }
 
@@ -284,14 +296,14 @@ namespace GamifyingTasks.Firebase.DB
                 case TaskType.Upcoming:
                     if (m_upcomingTasks != null)
                     {
-                        var filtter = m_upcomingTasks.Where(x => x.Value.UserId == m_currentUser.Uid);
+                        var filtter = m_upcomingTasks.Where(x => x.Value.UserId == CurrentLocalUser.Uid);
                         return filtter.ToDictionary(x => x.Key, x => x.Value);
                     }
                     break;
                 case TaskType.All:
                     if (m_allTasks != null)
                     {
-                        var filtter = m_allTasks.Where(x => x.Value.UserId == m_currentUser.Uid);
+                        var filtter = m_allTasks.Where(x => x.Value.UserId == CurrentLocalUser.Uid);
                         return filtter.ToDictionary(x => x.Key, x => x.Value);
                     }
                     break;
@@ -337,7 +349,7 @@ namespace GamifyingTasks.Firebase.DB
             {
                 // This should be the case anyway as we set this up when we load up the application
                 // but the if statment ensure that this is 100% the case
-                if (doc.GetValue<string>("UserId") == CurrentLocalUser.Uid)
+                if (doc.GetValue<string>("UID") == taskToUpdate.UID)
                 {
                     if (m_todayTasks.TryGetValue(doc.Id, out var docExists))
                         m_todayTasks.Remove(doc.Id);
@@ -345,6 +357,12 @@ namespace GamifyingTasks.Firebase.DB
                         m_upcomingTasks.Remove(doc.Id);
 
                     m_completedTasks.Add(doc.Id, taskToUpdate);
+                    Dictionary<string, object> updates = new Dictionary<string, object>
+                    {
+                        {"Completed", taskToUpdate.Completed}
+                    };
+
+                    await doc.Reference.UpdateAsync(updates);
                     break;
                 }
             }
@@ -369,6 +387,30 @@ namespace GamifyingTasks.Firebase.DB
 
             return m_userTasks;
         }
+        public static async Task<List<Events>> GetUsersEvents()
+        {
+            var coll = m_dbInstance.Collection("Events");
+
+            QuerySnapshot docs = await coll.GetSnapshotAsync();
+            List<Events> ret = new List<Events>();
+            foreach (var doc in docs.Documents)
+            {
+                if (doc.GetValue<string>("UserId") == CurrentLocalUser.Uid)
+                    ret.Add(new Events
+                    {
+                        UID = doc.Id,
+                        UserId = doc.GetValue<string>("UserId"),
+                        EventName = doc.GetValue<string>("EventName"),
+                        Description = doc.GetValue<string>("Description"),
+                        EventLocation = doc.GetValue<string>("EventLocation"),
+                        EventDate = doc.GetValue<Timestamp>("EventDate")
+
+                    });
+            }
+
+            return ret;
+        }
+
         public static int GetUsersLevel()
         {
 
@@ -387,12 +429,28 @@ namespace GamifyingTasks.Firebase.DB
 
 
 
-        public static void SetCurrentUser(User user)
+        public static async void SetCurrentUser(User user)
         {
             m_currentUser = user;
-            CurrentLocalUser = m_allUsers.Where(x => x.Value.UserName == user.Info.DisplayName).FirstOrDefault().Value;
+            var getUserData = await m_dbInstance.Collection("Users").GetSnapshotAsync();
 
-            CurrentLocalUser.Uid = user.Uid;
+            foreach (var doc in getUserData.Documents)
+            {
+                if (doc.GetValue<string>("UserName") == user.Info.DisplayName)
+                {
+                    CurrentLocalUser = new Users
+                    {
+                        Uid = doc.Id,
+                        UserName = doc.GetValue<string>("UserName"),
+                        Email = doc.GetValue<string>("Email"),
+                        Exp = doc.GetValue<int>("Exp"),
+                        Level = doc.GetValue<int>("Level"),
+                        requiredExp = doc.GetValue<int>("RequiredExp"),
+                        DayReg = doc.GetValue<Timestamp>("DayReg")
+                    };
+                    break;
+                }
+            }
         }
 
         public static User CurrentUser()

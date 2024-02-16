@@ -62,16 +62,13 @@
             <MudItem xs="6" xl="15">
                 <UpcomingTasksComponent @ref="upcomingTasksComponent" TaskUpdated="@TasksUpdated" />
             </MudItem>
-            <MudItem xs="12" xl="30">
-               <EventsAndRemindersComponent/>
+            <MudItem xs="12" xl="16">
+                <EventsRemindersComponent @ref="eventsRemindersComponent" />
                 <div class="d-flex justify-end">
                     <AddIconComponent TaskAdded="@TaskAdded" />
                 </div>
             </MudItem>
         </MudGrid>
-
-
-
     </div>
 
 
@@ -86,18 +83,23 @@
 @code {
     private UpcomingTasksComponent upcomingTasksComponent;
     private TodaysTasksComponent todaysTasksComponent;
+    private EventsRemindersComponent eventsRemindersComponent;
     private bool loading = true;
     private double progress;
 
     private FirestoreDb db = DBCore.GetDBInstance();
     protected override async Task OnInitializedAsync()
     {
-        progress = DBCore.CurrentLocalUser.Exp;
+
         if (DBCore.CurrentUser() == null)
         {
             navManger.NavigateTo("/");
         }
-        StateHasChanged();
+        else
+        {
+            UpdateProgress();
+        }
+
     }
     private string _menuConfirmText = "Confirm";
 
@@ -119,6 +121,7 @@
         UpdateProgress();
         await todaysTasksComponent.RefreshTaskList();
         await upcomingTasksComponent.RefreshTaskList();
+        await eventsRemindersComponent.RefreshList();
         StateHasChanged();
     }
 
@@ -128,7 +131,8 @@
         float fraction = Math.Min(DBCore.CurrentLocalUser.Exp / (float)DBCore.CurrentLocalUser.requiredExp, 1f);
 
         progress = Math.Round(fraction * 100, 0); // Round to the nearest whole number after calculation
-        if(progress >= 100){
+        if (progress >= 100)
+        {
             progress = 0;
         }
         StateHasChanged();

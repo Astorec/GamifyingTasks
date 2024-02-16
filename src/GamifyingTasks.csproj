@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
     <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="Google.Apis.Firebasestorage.v1beta" Version="1.66.0.3158" />
     <PackageReference Include="Google.Cloud.Firestore" Version="3.5.0" />
     <PackageReference Include="MudBlazor" Version="6.15.0" />
     <PackageReference Include="Fluxor" Version="5.4.0" />

@@ -132,3 +132,5 @@
 /home/astorec/Documents/Repos/GamifyingTasks/src/obj/Debug/net6.0/GamifyingTasks.pdb
 /home/astorec/Documents/Repos/GamifyingTasks/src/obj/Debug/net6.0/GamifyingTasks.genruntimeconfig.cache
 /home/astorec/Documents/Repos/GamifyingTasks/src/obj/Debug/net6.0/ref/GamifyingTasks.dll
+/home/astorec/Documents/Repos/GamifyingTasks/src/bin/Debug/net6.0/Firebase.Storage.dll
+/home/astorec/Documents/Repos/GamifyingTasks/src/bin/Debug/net6.0/Google.Apis.Firebasestorage.v1beta.dll

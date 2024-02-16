@@ -5,6 +5,8 @@ namespace GamifyingTasks.Classes
     public class Tasks
     {
         [FirestoreProperty]
+        public string UID { get; set; }
+        [FirestoreProperty]
         public string UserId { get; set; }
         [FirestoreProperty]
         public string Name { get; set; }

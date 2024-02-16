@@ -14,10 +14,10 @@ namespace GamifyingTasks.Classes
         [FirestoreProperty]
         public Timestamp DayReg { get; set; }
         [FirestoreProperty]
-        public int Level {get; set;} = 1;
+        public int Level {get; set;}
         [FirestoreProperty]
-        public int Exp {get; set;} = 0;
+        public int Exp {get; set;}
         [FirestoreProperty]
-        public int requiredExp {get; set;} = 200;
+        public int requiredExp {get; set;}
     }
 }

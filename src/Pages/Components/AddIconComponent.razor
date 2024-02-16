@@ -14,7 +14,7 @@
         <MudPaper>
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" VerticalAlign="true">
                 <MudButton OnClick="@OpenAddNewTask">Add New Task</MudButton>
-                <MudButton OnClick="@OpenAddNewTask">Add New Event</MudButton>
+                <MudButton OnClick="@OpenAddNewEvent">Add New Event</MudButton>
                 <MudButton OnClick="@OpenAddNewTask">Add New Reminder</MudButton>
             </MudButtonGroup>
         </MudPaper>
@@ -24,21 +24,34 @@
 @code {
     [Parameter]
     public EventCallback<bool> TaskAdded { get; set; }
+    [Parameter]
+    public EventCallback<bool> EventAdded { get; set; }
     public bool viewAddButtons = false;
-    public Dictionary<string, Tasks> tasks = new Dictionary<string, Tasks>();
-    public Dictionary<string, Tasks> todayTasks = new Dictionary<string, Tasks>();
-    public Dictionary<string, Tasks> upcomingTasks = new Dictionary<string, Tasks>();
 
     private async Task OpenAddNewTask()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, ClassBackground = "popup-style" };
-        var dialog = DialogService.Show<AddNewTask>("Add new task", options);
+        var dialog = DialogService.Show<AddNewTask>("Add New task", options);
 
         var result = await dialog.Result;
         if (!result.Canceled)
         {
             await DBCore.GetAllTasks();
             await TaskAdded.InvokeAsync(true);
+        }
+
+    }
+
+    private async Task OpenAddNewEvent()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, ClassBackground = "popup-style" };
+        var dialog = DialogService.Show<AddNewEvent>("Add New Event", options);
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            await DBCore.GetAllTasks();
+            await EventAdded.InvokeAsync(true);
         }
 
     }

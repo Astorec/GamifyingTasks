@@ -5,9 +5,11 @@ namespace GamifyingTasks.Classes
     public class Events
     {
         [FirestoreProperty]
+        public string UID { get; set; }
+        [FirestoreProperty]
         public string UserId { get; set; }
         [FirestoreProperty]
-        public string EventName { get; set; }
+         public string EventName { get; set; }
         [FirestoreProperty]
         public string EventLocation { get; set; }
         [FirestoreProperty]

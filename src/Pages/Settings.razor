@@ -1,0 +1,21 @@
+@page "/settings"
+<MudMainContent>
+    <MudPaper>
+        <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                    StartIcon="@Icons.Material.Filled.CloudUpload" for="@context.Id">
+                    Change Profile Picture
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+    </MudPaper>
+</MudMainContent>
+@code
+{
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private void UploadFiles(IBrowserFile file)
+    {
+        files.Add(file);
+    }
+}

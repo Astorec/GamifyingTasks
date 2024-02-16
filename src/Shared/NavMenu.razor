@@ -1,16 +1,15 @@
 ﻿﻿@using GamifyingTasks.Firebase.Authentication
 @using GamifyingTasks.Firebase.DB
 @inject NavigationManager navManger
-<MudNavMenu Dense="true" Color="Color.Info">
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.House" style="color: #E2C044;">Home
+<MudNavMenu Dense="true">
+    <MudNavLink Href="home" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.House" >Home
     </MudNavLink>
-    <MudNavLink Href="profile" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person" style="color: #E2C044;">
+    <MudNavLink Href="profile" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person"> 
         profile
     </MudNavLink>
-    <MudNavLink Href="settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings"
-        style="color: #E2C044;">
+    <MudNavLink Href="settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
         Settings</MudNavLink>
-        <MudNavLink @onclick="LogOut" Match="NavLinkMatch.Prefix"style="color: #E2C044;">Log Out</MudNavLink>
+        <MudNavLink @onclick="LogOut" Match="NavLinkMatch.Prefix">Log Out</MudNavLink>
 </MudNavMenu>
 
 @code{
