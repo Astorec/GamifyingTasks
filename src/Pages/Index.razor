@@ -10,20 +10,26 @@
 @inject NavigationManager navManger
 @inject IJSRuntime js
 <MudMainContent>
-    <div class="d-flex relative  align-start justify-center" Width="575px">
+    <div class="d-flex relative  align-start justify-center" Width="575px flex-grow-1">
 
         <MudGrid Spacing="2">
             <MudItem xs="12" xl="30">
-                <MudPaper Elevation="1">
+                <MudPaper Elevation="0">
+
                     <MudCard>
-                        <MudCardContent class="d-flex flex-grow-1">
+                        <div>
+                            <AddIconComponent TaskAdded="@TaskAdded" EventAdded="@EventAdded" />
+                        </div>
+                        <MudCardContent class="d-flex flex-grow-1 mt-n13">
                             <MudGrid class="flex-grow-1">
                                 <MudItem xs="12" xl="20"
-                                    class="d-flex flex-column flex-grow-1 align-center justify-center">
-                                    <div class="d-flex">
-                                        <MudImage Src="@DBCore.CurrentLocalUser.PfpUrl"
-                                            class="mud-theme-primary rounded-circle col-span-1" Width="95"
-                                            Height="95" />
+                                    class="d-flex flex-column flex-grow-1 align-center justify-center mb-n5">
+                                    <div class="d-flex flex-row">
+                                        <div class="d-flex">
+                                            <MudImage Src="@DBCore.CurrentLocalUser.PfpUrl"
+                                                class="mud-theme-primary rounded-circle col-span-1" Width="95"
+                                                Height="95" />
+                                        </div>
                                     </div>
                                     <div class="d-flex">
                                         <MudText Align="Align.Center" Color="Color.Primary">
@@ -68,9 +74,6 @@
             </MudItem>
             <MudItem xs="12" xl="16">
                 <EventsRemindersComponent @ref="eventsRemindersComponent" />
-                <div class="d-flex justify-end">
-                    <AddIconComponent TaskAdded="@TaskAdded" />
-                </div>
             </MudItem>
         </MudGrid>
         @if (shouldShowLevelUp)
@@ -130,13 +133,18 @@
         StateHasChanged();
     }
 
+
     private async Task TaskAdded(bool taskAdded)
     {
         await todaysTasksComponent.RefreshTaskList();
         await upcomingTasksComponent.RefreshTaskList();
         StateHasChanged();
     }
-
+    private async Task EventAdded(bool eventAdded)
+    {
+        await eventsRemindersComponent.RefreshList();
+        StateHasChanged();
+    }
     private async Task TaskCompleted(bool TaskCompsleted)
     {
         progress = UserLevelCaluclations.CalculateProgress();

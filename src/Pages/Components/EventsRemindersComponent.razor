@@ -41,12 +41,15 @@
 </MudPaper>
 
 @code {
+  [Parameter]
+    public EventCallback<bool> EventUpdated { get; set; }
     private List<Events> userEvents = new List<Events>();
     private bool loading = true;
     protected override async Task OnInitializedAsync()
     {
         if (DBCore.CurrentLocalUser != null && loading)
         {
+            await EventUpdated.InvokeAsync(true);
             await RefreshList();
             loading = false;
         }
@@ -56,5 +59,6 @@
     public async Task RefreshList()
     {
         userEvents = await DBCore.GetUsersEvents();
+        StateHasChanged();
     }
 }

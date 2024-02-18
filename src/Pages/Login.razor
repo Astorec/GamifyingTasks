@@ -8,21 +8,29 @@
         <MudTabPanel Text="Login">
             <MudForm @onsubmit="HandleLogin">
                 <MudTextField Label="Email" @bind-Value="email" T="string" Required="true"
-                    RequiredError="Please enter your e-mail" />
+                    RequiredError="Please enter your e-mail" Error="@emailBlank"/>
                 <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="pass" T="string" Required="true"
-                    RequiredError="Please enter your password" Password />
+                    RequiredError="Please enter your password" Password Error="@passBlank"/>
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Login</MudButton>
+                @if(invalidLogin)
+                {
+                    <MudAlert Severity="Severity.Error" class="mt-2">Invalid Login</MudAlert>
+                }
             </MudForm>
         </MudTabPanel>
         <MudTabPanel Text="Register">
             <MudForm @onsubmit="HandleRegister">
                 <MudTextField Label="Username" @bind-Value="regUserName" T="string" Required="true" 
-                RequiredError="Please enter a Username"/>
+                RequiredError="Please enter a Username" Error="@regUserBlank"/>
                 <MudTextField Label="Email" @bind-Value="regEmail" T="string" Required="true" 
-                RequiredError="Please enter an e-mail address"/>
+                RequiredError="Please enter an e-mail address" Error="@regEmailBlank"/>
                 <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="regPass" T="string" Required="true"
-                   RequiredError="Please enter a Password" Password />
+                   RequiredError="Please enter a Password" Password Error="@regPassBlank" />
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Register</MudButton>
+                 @if(userExists)
+                {
+                    <MudAlert Severity="Severity.Error" class="mt-2">E-mail already exists</MudAlert>
+                }
             </MudForm>
 
         </MudTabPanel>
@@ -34,14 +42,18 @@
     InputType PasswordInput = InputType.Password;
 
     private string email, pass;
-    private string regEmail, regPass, regConfirmPass, regUserName;
-    private bool displayError = false;
+    private string regEmail, regPass, regUserName;
+    private bool invalidLogin = false;
+    private bool userExists = false;
+    private bool regEmailBlank, regPassBlank, regUserBlank;
+    private bool emailBlank, passBlank;
 
     private async Task HandleLogin()
     {
+        invalidLogin = false;
         await DBCore.GetUsers();
 
-        if (email != "" && pass != "")
+        if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(pass))
         {
             try
             {
@@ -54,17 +66,29 @@
             }
             catch (Exception ex)
             {
+                invalidLogin = true;
                 Console.WriteLine($"Error in HandleLogin(): {ex.Message}\n\nStack Trace: {ex.StackTrace}");
             }
-
-
+        }
+        else{
+            if(string.IsNullOrWhiteSpace(email))
+            {
+                emailBlank = true;
+            }
+            if(string.IsNullOrWhiteSpace(pass))
+            {
+                passBlank = true;
+            }
         }
     }
 
     private async Task HandleRegister()
     {
-        Console.WriteLine("Hit 01");
-        if (regUserName != "" && regEmail != "" && regPass != "")
+        userExists = false;
+        regPassBlank = false;
+        regEmailBlank = false; 
+        regUserBlank = false;
+        if (!string.IsNullOrWhiteSpace(regUserName) && !string.IsNullOrWhiteSpace(regEmail) && !string.IsNullOrWhiteSpace(regPass))
         {
             Console.WriteLine("Hit 02");
             try
@@ -99,7 +123,20 @@
                 Console.WriteLine($"Error in HandleRegister(): {ex.Message}\n\nStack Trace: {ex.StackTrace}");
             }
         }
+        else
+        {
+            if(string.IsNullOrWhiteSpace(regUserName))
+            {
+                regUserBlank = true;
+            }
+            if(string.IsNullOrWhiteSpace(regEmail))
+            {
+                regEmailBlank = true;
+            }
+            if(string.IsNullOrWhiteSpace(regPass))
+            {
+                regPassBlank = true;
+            }
+        }
     }
-
-
 }

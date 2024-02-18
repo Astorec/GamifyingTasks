@@ -29,7 +29,7 @@
                     </MudText>
                 </div>
             }
-              <div Style="height: 430x; wdith: 75%; overflow-x: hidden; overflow-y: auto;">
+              <div Style="max-height: 375px; wdith: 75%; overflow-x: hidden; overflow-y: 10; padding-bottom: 20px; padding-right: 10px;">
             @if (todayTasks.Values.Count() > 0 && todayTasks != null && !loading)
             {
                 @foreach (var task in todayTasks)

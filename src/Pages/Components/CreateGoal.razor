@@ -1,16 +1,17 @@
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
 @inject NavigationManager navManger
-<div calss="d-flex flex-column gap-4">
+<div class="d-flex flex-column gap-4">
     <div class="d-flex flex-row gap-5 justify-center">
         <div>
             <!-- Enter the goal Name -->
-            <MudTextField @bind-Value="goalName" Label="Goal Name" Variant="Variant.Filled" Required="true" RequiredError="Goal Name is Required" />
+            <MudTextField @bind-Value="goalName" Label="Goal Name" Variant="Variant.Filled" Required="true"
+                RequiredError="Goal Name is Required" Error="@goalNameEmpty"/>
         </div>
         <div>
             <!-- Enter the level required for the goal -->
             <MudTextField @bind-Value="levelRequired" Label="Level Required to reach goal" Variant="Variant.Filled"
-                InputType="InputType.Number" Required="true"/>
+                InputType="InputType.Number" Required="true" RequiredError="Field Can't be Empty" Error="@levelRequiredEmpty" />
         </div>
 
     </div>
@@ -27,6 +28,12 @@
         <div>
             <MudTextField @bind-Value="customReward" Label="Add Custom Reward" Variant="Variant.Filled" />
         </div>
+        @if(noValidReward)
+        {
+            <div class="d-flex">
+                <MudText Color="Color.Error">Please select a reward or enter a custom reward</MudText>
+            </div>
+        }
     </div>
     <div class="d-flex ma-8 justify-end">
         <MudButton OnClick="@SaveGoal" Variant="Variant.Filled" Color="Color.Primary">
@@ -36,6 +43,7 @@
 </div>
 
 @code {
+    private bool goalNameEmpty, levelRequiredEmpty, noValidReward;
     private string goalName = "";
     private int levelRequired = 0;
     private string selectedReward;
@@ -74,14 +82,29 @@
 
     private async Task SaveGoal()
     {
+        goalNameEmpty = false;
+        levelRequiredEmpty = false;
+        noValidReward = false;
         string reward = "";
-        if (selectedReward != "" && customReward == "")
+        if (string.IsNullOrWhiteSpace(goalName) || levelRequired == 0)
+        {
+            goalNameEmpty = true;
+            levelRequiredEmpty = true;
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selectedReward) && string.IsNullOrWhiteSpace(customReward))
         {
             reward = selectedReward;
         }
-        else if (customReward != "")
+        else if (!string.IsNullOrWhiteSpace(customReward))
         {
             reward = customReward;
+        }
+        else
+        {
+            noValidReward = true;
+            return;
         }
 
         Console.WriteLine("Reward: " + reward);

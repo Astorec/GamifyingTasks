@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eJGl0ChTUmgq7gUWeIBvPh+2IK+SKJdAI6MDio3wYrk=",
+  "Hash": "bNq6/9KtEfPZdQyWI3YKTj8PvtglHxIbN2/YVtHE3cw=",
   "Source": "GamifyingTasks",
   "BasePath": "_content/GamifyingTasks",
   "Mode": "Default",
@@ -151,6 +151,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/NavMenu.css",
+      "SourceId": "GamifyingTasks",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
+      "BasePath": "_content/GamifyingTasks",
+      "RelativePath": "css/NavMenu.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/NavMenu.css"
     },
     {
       "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/open-iconic/FONT-LICENSE",
@@ -321,6 +338,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/site.css"
+    },
+    {
+      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/TaskButtons.css",
+      "SourceId": "GamifyingTasks",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
+      "BasePath": "_content/GamifyingTasks",
+      "RelativePath": "css/TaskButtons.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/TaskButtons.css"
     },
     {
       "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/favicon.ico",

@@ -9,8 +9,8 @@
     <MudIconButton Icon="@Icons.Material.Filled.AddCircle" aria-label="newItem" Size="Size.Large" Color="Color.Info"
         @onclick="ToggleAddPopup">
     </MudIconButton>
-    <MudPopover OverflowBehavior="OverflowBehavior.FlipNever" Open="@viewAddButtons" AnchorOrigin="Origin.TopRight"
-        TransformOrigin="Origin.BottomRight" Class="pa-4">
+    <MudPopover OverflowBehavior="OverflowBehavior.FlipNever" Open="@viewAddButtons" AnchorOrigin="Origin.BottomRight"
+        TransformOrigin="Origin.TopRight" Class="pa-4">
         <MudPaper>
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Filled" VerticalAlign="true">
                 <MudButton OnClick="@OpenAddNewTask">Add New Task</MudButton>

@@ -24,7 +24,7 @@
 </MudDialog>
 
 
-@code {
+@code { 
     private bool hasDueDate = true;
     MudDatePicker _picker;
     DateTime? date = DateTime.Today;
@@ -44,9 +44,9 @@
                     UserId = DBCore.CurrentLocalUser.Uid
                 };
 
-                
-                newEvent.SetEventDate(date.Value.ToUniversalTime());
-            
+
+            newEvent.SetEventDate(date.Value.ToUniversalTime());
+
             await DBCore.AddNewEvent(newEvent);
             MudDialog.Close(DialogResult.Ok(true));
         }
