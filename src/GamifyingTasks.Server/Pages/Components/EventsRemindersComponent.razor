@@ -1,0 +1,60 @@
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Firebase.DB
+<MudPaper Elevation="1" Height="380px">
+    <div class="d-flex justify-center">
+        <MudText>
+            <b>Events & Reminders</b>
+        </MudText>
+    </div>
+
+    <MudTable Items="@userEvents" Loading="@loading" Breakpoint="Breakpoint.None">
+        <HeaderContent>
+            <MudTh>
+                Name
+            </MudTh>
+            <MudTh>
+                Description
+            </MudTh>
+            <MudTh>
+                Location
+            </MudTh>
+            <MudTh>
+                Date
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">
+                @context.EventName
+            </MudTd>
+            <MudTd DataLabel="Description">
+                @context.Description
+            </MudTd>
+            <MudTd DataLabel="Location">
+                @context.EventLocation
+            </MudTd>
+            <MudTd DataLabel="Date">
+                @DateOnly.FromDateTime(context.EventDate.ToDateTime()).ToString("dd/MM/yyyy")
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+
+</MudPaper>
+
+@code {
+    private List<Events> userEvents = new List<Events>();
+    private bool loading = true;
+    protected override async Task OnInitializedAsync()
+    {
+        if (DBCore.CurrentLocalUser != null && loading)
+        {
+            await RefreshList();
+            loading = false;
+        }
+        StateHasChanged();
+    }
+
+    public async Task RefreshList()
+    {
+        userEvents = await DBCore.GetUsersEvents();
+    }
+}

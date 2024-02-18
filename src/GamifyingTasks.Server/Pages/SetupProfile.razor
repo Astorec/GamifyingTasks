@@ -1,0 +1,42 @@
+@page "/newUser"
+@using BlazorAnimate
+@using GamifyingTasks.Pages.Components
+<MudMainContent>
+    <MudPaper class="d-flex flex-column">
+        <div class="d-flex justify-center">
+            <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
+                <MudText Typo="Typo.h6" Align="Align.Center">Welcome to your new way of hadnling your tasks!</MudText>
+            </Animate>
+        </div>
+        <div class="d-flex justify-center">
+            <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(1)">
+                <MudText Typo="Typo.h6" Align="Align.Center">First let's setup your profile</MudText>
+            </Animate>
+        </div>
+
+        <div class="d-flex justify-center">
+            <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(2)">
+                <MudText Typo="Typo.body1" Align="Align.Center">Each time you complete a task you can work towards a
+                    Goal with a Reward</MudText>
+
+            </Animate>
+        </div>
+
+        <div class="d-flex justify-center">
+            <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(2)">
+                <MudText Typo="Typo.body1" Align="Align.Center">We have some preset reawards for you to choose from, but
+                    you can also create your
+                    own!</MudText>
+
+            </Animate>
+
+        </div>
+        <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)" Delay="TimeSpan.FromSeconds(3)">
+            <div>
+                <CreateGoal />
+            </div>
+        </Animate>
+
+
+    </MudPaper>
+</MudMainContent>

@@ -4,8 +4,9 @@ using MudBlazor.Services;
 using GamifyingTasks.Firebase.DB;
 using Fluxor;
 using GamifyingTasks.Data;
-var builder = WebApplication.CreateBuilder(args);
+using GamifyingTasks.Firebase.DB.Interfaces;
 
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -20,7 +21,9 @@ builder.Services.AddFluxor(o =>
       });
 });
 
-builder.Services.AddScoped<DBCore>();
+builder.Services.AddScoped<IDBCore>();
+builder.Services.AddScoped<IUsers>();
+builder.Services.AddScoped<ITasks>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

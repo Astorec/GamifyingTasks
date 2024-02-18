@@ -1,0 +1,112 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = GamifyingTasks
+build_property.RootNamespace = GamifyingTasks
+build_property.ProjectDir = /home/astorec/Documents/Repos/GamifyingTasks/src/
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/astorec/Documents/Repos/GamifyingTasks/src
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/AddIconComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9BZGRJY29uQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/CreateGoal.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9DcmVhdGVHb2FsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/EventsRemindersComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9FdmVudHNSZW1pbmRlcnNDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/RewardsList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9SZXdhcmRzTGlzdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/TodaysTasksComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9Ub2RheXNUYXNrc0NvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/UpcomingTasksComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9VcGNvbWluZ1Rhc2tzQ29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/UploadNewPFP.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9VcGxvYWROZXdQRlAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewEvent.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld0V2ZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewReminder.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld1JlbWluZGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/AddNewTask.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0FkZE5ld1Rhc2sucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/ConfirmLogout.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0NvbmZpcm1Mb2dvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/CreateGoalPopup.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0NyZWF0ZUdvYWxQb3B1cC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Profile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUHJvZmlsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Settings.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2V0dGluZ3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/SetupProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2V0dXBQcm9maWxlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-5wzzrahthz
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL05hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-ttbrl5n0zh
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0hvc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvX0xheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

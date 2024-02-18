@@ -1,0 +1,33 @@
+<div>
+    <MudDataGrid T="string" MultiSelection="true" Items="@Rewards" @bind-SelectedItems="SelectedRewards">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Rewards</MudText>
+        </ToolBarContent>
+        <Columns>
+            <SelectColumn T="string" />
+            <PropertyColumn Property="x => x" Title="Reward" />
+        </Columns>
+    </MudDataGrid>
+</div>
+<div class="d-flex flex-row gap- justify-center mt-3">
+    <div Width="120">
+        <MudTextField @bind-Value="customReward" Label="Add Custom Reward" Variant="Variant.Outlined" />
+    </div>
+    <div class="d-flex align-center ml-2">
+        <MudButton OnClick="@AddCustomReward" Variant="Variant.Filled" Color="Color.Primary">Add</MudButton>
+    </div>
+
+</div>
+
+@code {
+    private string customReward = "";
+    private IEnumerable<string> Rewards = new List<string>()
+{ "Cinema", "Eating Out", "Takeaway", "New Game", "New Clothes", "Day Out"};
+    private HashSet<string> SelectedRewards  = new HashSet<string>();
+
+    private void AddCustomReward()
+    {
+        Rewards = Rewards.Append(customReward);
+        StateHasChanged();
+    }
+}
