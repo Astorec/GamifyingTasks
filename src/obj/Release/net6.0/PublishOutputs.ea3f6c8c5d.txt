@@ -1,7 +1,0 @@
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/GamifyingTasks
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/appsettings.Development.json
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/appsettings.json
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/GamifyingTasks.dll
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/GamifyingTasks.deps.json
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/GamifyingTasks.runtimeconfig.json
-/home/astorec/Documents/Repos/GamifyingTasks/GamifyingTasks/bin/Release/net6.0/publish/GamifyingTasks.pdb
