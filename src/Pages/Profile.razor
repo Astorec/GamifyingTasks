@@ -1,12 +1,15 @@
 @page "/profile"
 @using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Pages.Popups
 @inject NavigationManager navManger
+@inject IDialogService DialogService
 
 <MudMainContent>
     <MudGrid>
         <MudItem xs="12" xl="30">
             <div class="d-flex align-center justify-center">
-                <MudImage Src="@DBCore.CurrentUser().Info.PhotoUrl" class="mud-theme-primary rounded-circle col-span-1"
+                <MudImage Src="@DBCore.CurrentLocalUser.PfpUrl" class="mud-theme-primary rounded-circle col-span-1"
                     Width="300" Height="300" />
             </div>
             <div class="d-flex align-center justify-center">
@@ -45,15 +48,25 @@
                                 <MudStack Spacing="16" Row="true">
                                     <MudStack>
                                         <MudPaper Class="d-flex justify-center" Elevation="0">Tasks Completed</MudPaper>
-                                        <MudPaper Class="d-flex justify-center" Elevation="0">15</MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @DBCore.GetCompletedTaskCount()</MudPaper>
                                     </MudStack>
                                     <MudStack>
-                                        <MudPaper Class="d-flex justify-center" Elevation="0">Day Login Streak</MudPaper>
-                                        <MudPaper Class="d-flex justify-center" Elevation="0">5</MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">Login Streak
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @DBCore.CurrentLocalUser.LoginStreak</MudPaper>
                                     </MudStack>
                                     <MudStack>
-                                        <MudPaper Class="d-flex justify-center" Elevation="0">Days longest Streak</MudPaper>
-                                        <MudPaper Class="d-flex justify-center"Elevation="0">7</MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">longest Streak
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @DBCore.CurrentLocalUser.LongestStreak</MudPaper>
+                                    </MudStack>
+                                    <MudStack>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">Goals Met
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">0</MudPaper>
                                     </MudStack>
                                 </MudStack>
                             </MudPaper>
@@ -63,34 +76,45 @@
                 </MudCardContent>
             </MudCard>
         </MudItem>
-        <MudItem xs="6" xl="15">
+        <MudItem xs="12" xl="12">
             <MudPaper Height="430px">
                 <MudCard Elevation="0">
-                    <MudCardContent class="d-flex flex-grow-1 justify-center">
-                        <MudText><b>Personal Goals</b></MudText>
+                    <MudCardContent class="d-flex flex-column flex-grow-1 justify-center">
+                        <div class="d-flex justify-center">
+                            <MudText><b>Personal Goals</b></MudText>
+                        </div>
+                        <div>
+                            <MudTable Items="@userGoals" Breakpoint="Breakpoint.None">
+                                <HeaderContent>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Reward</MudTh>
+                                    <MudTh>Level Required</MudTh>
+                                </HeaderContent>
+
+                                <RowTemplate>
+                                    <MudTd>@context.Value.GoalName</MudTd>
+                                    <MudTd>@context.Value.Reward</MudTd>
+                                    <MudTd>@context.Value.GoalLevel</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </div>
+                        <div class="d-flex justify-end">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OpenNewGoalDialog">New
+                                Goal</MudButton>
+                        </div>
                     </MudCardContent>
                 </MudCard>
             </MudPaper>
         </MudItem>
-                <MudItem xs="6" xl="15">
-            <MudPaper Height="430px">
-                <MudCard Elevation="0">
-                    <MudCardContent class="d-flex flex-grow-1 justify-center">
-                        <MudText><b>Goals Reached</b></MudText>                          
-                    </MudCardContent>
-                </MudCard>
-                  <MudCard Elevation="0">
-                    <MudCardContent class="d-flex flex-grow-1 justify-center">
-                        <MudText><b>Personal Rewards Gained</b></MudText>                          
-                    </MudCardContent>
-                </MudCard>
-            </MudPaper>
+        <MudItem xs="12" xl="12">
+
         </MudItem>
     </MudGrid>
 </MudMainContent>
 @code {
 
     private double progress = 0;
+    private Dictionary<string, UserGoals> userGoals = new Dictionary<string, UserGoals>();
     protected override async Task OnInitializedAsync()
     {
 
@@ -100,6 +124,7 @@
         }
         else
         {
+            await DisplayUserGoals();
             UpdateProgress();
         }
     }
@@ -115,5 +140,23 @@
             progress = 0;
         }
         StateHasChanged();
+    }
+
+    private async Task DisplayUserGoals()
+    {
+        // Display the users Goals
+        userGoals = await DBCore.GetUserGoals();
+        StateHasChanged();
+    }
+
+    private async Task OpenNewGoalDialog()
+    {
+        var parameters = new DialogParameters();
+        var dialog = DialogService.Show<CreateGoalPopup>("New Goal", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            StateHasChanged();
+        }
     }
 }

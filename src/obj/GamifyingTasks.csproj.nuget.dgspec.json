@@ -39,6 +39,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "BlazorAnimate": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "FirebaseAdmin": {
               "target": "Package",
               "version": "[2.4.0, )"
@@ -71,9 +75,21 @@
               "target": "Package",
               "version": "[3.5.0, )"
             },
+            "Microsoft.AspNetCore.SignalR.Client": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "MudBlazor": {
               "target": "Package",
               "version": "[6.15.0, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.2, )"
             }
           },
           "imports": [

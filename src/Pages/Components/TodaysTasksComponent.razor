@@ -5,7 +5,6 @@
 @using GamifyingTasks.Pages.Popups
 @using GamifyingTasks.Data
 @inject NavigationManager navManger
-
 <MudPaper Elevation="1" Height="430px">
      <MudCard Elevation="0">
         <MudCardContent class="d-flex flex-column flex-grow-1">
@@ -57,7 +56,6 @@
                                                                 @if (SelectedTask.DueDate != Timestamp.FromDateTime(new DateTime(9999, 12,
                                                                 31).ToUniversalTime()))
                                                                 {
-
                                                                     <MudPaper class="d-flex align-center justify-center mt-1 ml-2"
                                                                     Elevation="0">
                                                                         <MudText Typo="Typo.subtitle2">
@@ -111,7 +109,8 @@
                                     <div class="d-flex align-end">
                                         <MudButtonGroup Color="Color.Success" Variant="Variant.Filled">
                                             <MudButton Color="Color.Success" @onclick="() => CompleteTask(task.Value)"  Size="Size.Small">
-                                                Confirm</MudButton>
+                                              Confirm                                                
+                                            </MudButton>
                                             <MudButton Color="Color.Error" Size="Size.Small"   @onclick="() => DeleteTask(task.Key)">                                                Skip</MudButton>
                                         </MudButtonGroup>
                                     </div>
@@ -135,7 +134,6 @@
     private bool viewTask = false;
     public bool viewAddButtons = false;
     private Tasks? SelectedTask { get; set; }
-
     private FirestoreDb db = DBCore.GetDBInstance();
     public Dictionary<string, Tasks> tasks = new Dictionary<string, Tasks>();
     public Dictionary<string, Tasks> todayTasks = new Dictionary<string, Tasks>();

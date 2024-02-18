@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
+using Firebase.Storage;
 
 namespace GamifyingTasks.Firebase.Authentication
 {
@@ -20,6 +21,8 @@ namespace GamifyingTasks.Firebase.Authentication
             return new FirebaseAuthClient(config);
 
         }
+
+        
 
         public static FirebaseAuthClient GetClient()
         {

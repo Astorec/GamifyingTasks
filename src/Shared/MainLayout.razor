@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using GamifyingTasks.Firebase.DB
+@inject NavigationManager navManger
 <MudLayout>
     
     <MudAppBar Elevation="0">
@@ -38,6 +39,8 @@
 
     }
 
+    
+
 /*
     Color values
     #86ABC8 - Grey-ish Blue - TextSecondary, Surface
@@ -57,7 +60,7 @@
             TextPrimary = "#002038",
             TextSecondary = "#86ABC8",
             Background = "#E9EEF2",
-            Surface = "#86ABC8",
+            Surface = "#507C9D",
             Info = "#002038",
             Success = "#507C9D",
             Error = "#507C9D",

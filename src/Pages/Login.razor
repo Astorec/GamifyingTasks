@@ -7,18 +7,21 @@
     <MudTabs>
         <MudTabPanel Text="Login">
             <MudForm @onsubmit="HandleLogin">
-                <MudTextField Label="Email" @bind-Value="email" T="string" Required />
-                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="pass" T="string" Required
-                    Password />
+                <MudTextField Label="Email" @bind-Value="email" T="string" Required="true"
+                    RequiredError="Please enter your e-mail" />
+                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="pass" T="string" Required="true"
+                    RequiredError="Please enter your password" Password />
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Login</MudButton>
             </MudForm>
         </MudTabPanel>
         <MudTabPanel Text="Register">
             <MudForm @onsubmit="HandleRegister">
-                <MudTextField Label="Username" @bind-Value="regUserName" T="string" Required />
-                <MudTextField Label="Email" @bind-Value="regEmail" T="string" Required />
-                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="regPass" T="string" Required
-                    Password />
+                <MudTextField Label="Username" @bind-Value="regUserName" T="string" Required="true" 
+                RequiredError="Please enter a Username"/>
+                <MudTextField Label="Email" @bind-Value="regEmail" T="string" Required="true" 
+                RequiredError="Please enter an e-mail address"/>
+                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="regPass" T="string" Required="true"
+                   RequiredError="Please enter a Password" Password />
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Register</MudButton>
             </MudForm>
 
@@ -31,13 +34,13 @@
     InputType PasswordInput = InputType.Password;
 
     private string email, pass;
-    private string regEmail, regPass, regUserName;
+    private string regEmail, regPass, regConfirmPass, regUserName;
     private bool displayError = false;
 
     private async Task HandleLogin()
     {
         await DBCore.GetUsers();
-        
+
         if (email != "" && pass != "")
         {
             try
@@ -45,6 +48,8 @@
                 var currentUser = await FirebaseAuth.GetClient().SignInWithEmailAndPasswordAsync(email, pass);
                 DBCore.IsLoggedIn = true;
                 DBCore.SetCurrentUser(currentUser.User);
+                await DBCore.GetUserGoals();
+                await DBCore.GetTasks();
                 NavManager.NavigateTo("/home");
             }
             catch (Exception ex)
@@ -75,16 +80,17 @@
                         DayReg = Timestamp.FromDateTime(DateTime.UtcNow),
                         Level = 1,
                         Exp = 0,
-                        requiredExp = 200
+                        requiredExp = 200,
+                        LastLogin = Timestamp.FromDateTime(DateTime.UtcNow),
+                        LoginStreak = 1,
+                        LongestStreak = 1,
+                        PfpUrl = ""
                     };
 
                 await DBCore.AddNewUser(newUser);
-                DBCore.IsLoggedIn = true;
                 DBCore.SetCurrentUser(currentUser.User);
 
-
-
-                NavManager.NavigateTo("/Home");
+                NavManager.NavigateTo("/newUser");
 
 
             }

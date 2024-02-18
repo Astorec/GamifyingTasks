@@ -18,7 +18,7 @@ namespace GamifyingTasks.Firebase.DB
         #region Variables
         public static event EventHandler<EventArgs> ListUpdated;
         public enum TaskType { Today, Upcoming, All }
-        private static FirestoreDb m_dbInstance;
+        private static FirestoreDb m_dbInstance = GetDBInstance();
         private static FirebaseApp m_app;
 
         private static Dictionary<string, Tasks> m_allTasks = new Dictionary<string, Tasks>();
@@ -29,6 +29,7 @@ namespace GamifyingTasks.Firebase.DB
         private static Dictionary<string, Reminders> m_userReminders = new Dictionary<string, Reminders>();
         private static Dictionary<string, Events> m_userEvents = new Dictionary<string, Events>();
         private static Dictionary<string, Users> m_allUsers = new Dictionary<string, Users>();
+        private static Dictionary<string, UserGoals> m_userGoals = new Dictionary<string, UserGoals>();
         private static User m_currentUser;
 
         // Stores the local information of the Current User that is required for Displaying. 
@@ -179,6 +180,13 @@ namespace GamifyingTasks.Firebase.DB
             await GetEvents();
         }
 
+        public static async Task AddNewGoal(UserGoals goal)
+        {
+            var docRef = await m_dbInstance.Collection("Goals").AddAsync(goal);
+            await docRef.UpdateAsync("UID", docRef.Id);
+            await GetUserGoals();
+        }
+
         public static async Task DeleteTask(string uid)
         {
             DocumentReference docRef = m_dbInstance.Document("tasks/" + uid);
@@ -251,6 +259,10 @@ namespace GamifyingTasks.Firebase.DB
             return m_dbInstance;
         }
 
+        public static FirebaseApp GetAppInstance()
+        {
+            return m_app;
+        }
         /// <summary>
         /// Gets all the Tasks from the Firestore DB
         /// </summary>
@@ -328,6 +340,11 @@ namespace GamifyingTasks.Firebase.DB
                         {"RequiredExp", user.requiredExp}
                     };
 
+                    if (user.PfpUrl != null)
+                    {
+                        updates.Add("PfpUrl", user.PfpUrl);
+                    }
+
                     await doc.Reference.UpdateAsync(updates);
 
                     break;
@@ -383,6 +400,8 @@ namespace GamifyingTasks.Firebase.DB
                     Console.WriteLine("Hit 04");
                     m_userTasks.Add(task.Key, task.Value);
                 }
+
+
             }
 
             return m_userTasks;
@@ -406,9 +425,16 @@ namespace GamifyingTasks.Firebase.DB
                         EventDate = doc.GetValue<Timestamp>("EventDate")
 
                     });
+
+
             }
 
             return ret;
+        }
+
+        public static int GetCompletedTaskCount()
+        {
+            return m_completedTasks.Count();
         }
 
         public static int GetUsersLevel()
@@ -423,6 +449,7 @@ namespace GamifyingTasks.Firebase.DB
                     ret = user.Value.Level;
                     return ret;
                 }
+
             }
             return ret;
         }
@@ -438,6 +465,17 @@ namespace GamifyingTasks.Firebase.DB
             {
                 if (doc.GetValue<string>("UserName") == user.Info.DisplayName)
                 {
+
+                    if (!doc.ContainsField("LastLogin"))
+                    {
+                        Dictionary<string, object> updates = new Dictionary<string, object>();
+
+                        // update the collection to add LastLogin, LoginStreak and LongestStreak
+                        updates.Add("LastLogin", Timestamp.FromDateTime(DateTime.UtcNow));
+                        updates.Add("LoginStreak", 1);
+                        updates.Add("LongestStreak", 1);
+                        await doc.Reference.UpdateAsync(updates);
+                    }
                     CurrentLocalUser = new Users
                     {
                         Uid = doc.Id,
@@ -445,12 +483,77 @@ namespace GamifyingTasks.Firebase.DB
                         Email = doc.GetValue<string>("Email"),
                         Exp = doc.GetValue<int>("Exp"),
                         Level = doc.GetValue<int>("Level"),
-                        requiredExp = doc.GetValue<int>("RequiredExp"),
-                        DayReg = doc.GetValue<Timestamp>("DayReg")
+                        requiredExp = doc.GetValue<int>("requiredExp"),
+                        DayReg = doc.GetValue<Timestamp>("DayReg"),
+                        LastLogin = doc.GetValue<Timestamp>("LastLogin"),
+                        LoginStreak = doc.GetValue<int>("LoginStreak"),
+                        LongestStreak = doc.GetValue<int>("LongestStreak")
                     };
+
+                    if (doc.GetValue<string>("PfpUrl") != null)
+                    {
+                        CurrentLocalUser.PfpUrl = doc.GetValue<string>("PfpUrl");
+                    }
+
+
+
+                    // Compare the LoginDate to the current date and if it is not the same
+                    // increase the login streak by 1
+                    if (CurrentLocalUser.LastLogin.ToDateTime().Date != DateTime.UtcNow.Date)
+                    {
+
+                        // Create a blank dictionary
+                        Dictionary<string, object> updates = new Dictionary<string, object>();
+
+                        // If the Last login date is more than one day set the streak to 0
+                        if (CurrentLocalUser.LastLogin.ToDateTime().Date > DateTime.UtcNow.AddDays(1).Date)
+                        {
+                            CurrentLocalUser.LoginStreak = 0;
+                        }
+                        else
+                        {
+                            CurrentLocalUser.LoginStreak = CurrentLocalUser.LoginStreak + 1;
+                        }
+
+                        updates.Add("LoginStreak", CurrentLocalUser.LoginStreak);
+                        updates.Add("LastLogin", Timestamp.FromDateTime(DateTime.UtcNow));
+
+                        // Check if the current login streak is greater than the longest streak
+                        if (CurrentLocalUser.LoginStreak > CurrentLocalUser.LongestStreak)
+                        {
+                            CurrentLocalUser.LongestStreak = CurrentLocalUser.LoginStreak;
+                            updates.Add("LongestStreak", CurrentLocalUser.LongestStreak);
+                        }
+                        // Push Updates to DB
+                        await doc.Reference.UpdateAsync(updates);
+                    }
                     break;
                 }
             }
+        }
+
+        public static async Task<Dictionary<string, UserGoals>> GetUserGoals()
+        {
+            var getGoals = await m_dbInstance.Collection("Goals").GetSnapshotAsync();
+
+            foreach (var goal in getGoals.Documents)
+            {
+                // if the goal is not in the list of user goals and the user id is the same as the current user
+                if (goal.GetValue<string>("UserId") == m_currentUser.Uid && !m_userGoals.ContainsKey(goal.Id))
+                {
+                    UserGoals userGoal = new UserGoals
+                    {
+                        UID = goal.Id,
+                        UserId = goal.GetValue<string>("UserId"),
+                        GoalName = goal.GetValue<string>("GoalName"),
+                        GoalLevel = goal.GetValue<int>("GoalLevel"),
+                        Reward = goal.GetValue<string>("Reward")
+                    };
+                    m_userGoals.Add(goal.Id, userGoal);
+                }
+            }
+
+            return m_userGoals;
         }
 
         public static User CurrentUser()
@@ -470,5 +573,17 @@ namespace GamifyingTasks.Firebase.DB
             }
             return new Users();
         }
+
+        public static void Dispose()
+        {
+            m_allTasks.Clear();
+            m_completedTasks.Clear();
+            m_todayTasks.Clear();
+            m_upcomingTasks.Clear();
+            m_userEvents.Clear();
+            m_userReminders.Clear();
+            m_userTasks.Clear();
+        }
     }
+
 }

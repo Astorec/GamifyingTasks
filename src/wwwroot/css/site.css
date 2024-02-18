@@ -62,3 +62,25 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+    .level-up-animation {
+        position: absolute;
+        top: 10.8%;
+        left: 45;
+        z-index: 999; /* Ensure animation is on top */
+        opacity: 0;
+        animation: level-up 1.5s ease-in-out both;
+      }
+      
+      @keyframes level-up {
+        0% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      

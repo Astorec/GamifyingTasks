@@ -23,8 +23,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9BZGRJY29uQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/CreateGoal.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9DcmVhdGVHb2FsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/EventsRemindersComponent.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9FdmVudHNSZW1pbmRlcnNDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/RewardsList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9SZXdhcmRzTGlzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/TodaysTasksComponent.razor]
@@ -35,8 +43,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9VcGNvbWluZ1Rhc2tzQ29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ291bnRlci5yYXpvcg==
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Components/UploadNewPFP.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcG9uZW50cy9VcGxvYWROZXdQRlAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Index.razor]
@@ -63,6 +71,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0NvbmZpcm1Mb2dvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Popups/CreateGoalPopup.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUG9wdXBzL0NyZWF0ZUdvYWxQb3B1cC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/Profile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -71,8 +83,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2V0dGluZ3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/astorec/Documents/Repos/GamifyingTasks/src/Shared/SurveyPrompt.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1N1cnZleVByb21wdC5yYXpvcg==
+[/home/astorec/Documents/Repos/GamifyingTasks/src/Pages/SetupProfile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU2V0dXBQcm9maWxlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/astorec/Documents/Repos/GamifyingTasks/src/_Imports.razor]

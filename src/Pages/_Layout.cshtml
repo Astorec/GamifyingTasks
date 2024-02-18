@@ -12,9 +12,11 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="GamifyingTasks.styles.css" rel="stylesheet" />
-    
+
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <liunk href="~/notification/GamifyingTasks.notification.css" rel="stylesheer" />
+
 </head>
 
 <body>
@@ -33,6 +35,22 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+     <script src="_content/BlazorAnimate/blazorAnimateInterop.js"></script>
+
+    <script>
+        function playCompletionSound() {
+            document.getElementById("completionSound").play();
+        }
+           
+    </script>
+
+    <script>
+        function playLevelUpSound() {
+            document.getElementById("levelUpSound").play();
+        }
+    </script>
+    <audio id="completionSound" src="sfx/CompletedTask.wav" />
+    <audio id="levelUpSound" src="sfx/LevelUp.wav" />
 
 </body>
 

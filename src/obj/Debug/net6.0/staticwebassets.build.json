@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "X2grirpSSNzNIKN7qWb5IQukhfGrgjgPVIabTIJFNzc=",
+  "Hash": "eJGl0ChTUmgq7gUWeIBvPh+2IK+SKJdAI6MDio3wYrk=",
   "Source": "GamifyingTasks",
   "BasePath": "_content/GamifyingTasks",
   "Mode": "Default",
@@ -16,6 +16,40 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/aos.css",
+      "SourceId": "BlazorAnimate",
+      "SourceType": "Package",
+      "ContentRoot": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/",
+      "BasePath": "_content/BlazorAnimate",
+      "RelativePath": "aos.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/aos.css"
+    },
+    {
+      "Identity": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/blazorAnimateInterop.js",
+      "SourceId": "BlazorAnimate",
+      "SourceType": "Package",
+      "ContentRoot": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/",
+      "BasePath": "_content/BlazorAnimate",
+      "RelativePath": "blazorAnimateInterop.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/astorec/.nuget/packages/blazoranimate/3.0.0/staticwebassets/blazorAnimateInterop.js"
+    },
     {
       "Identity": "/home/astorec/.nuget/packages/mudblazor/6.15.0/staticwebassets/MudBlazor.min.css",
       "SourceId": "MudBlazor",
@@ -304,6 +338,57 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/favicon.ico"
+    },
+    {
+      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/sfx/CompletedTask.mp3",
+      "SourceId": "GamifyingTasks",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
+      "BasePath": "_content/GamifyingTasks",
+      "RelativePath": "sfx/CompletedTask.mp3",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/sfx/CompletedTask.mp3"
+    },
+    {
+      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/sfx/CompletedTask.wav",
+      "SourceId": "GamifyingTasks",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
+      "BasePath": "_content/GamifyingTasks",
+      "RelativePath": "sfx/CompletedTask.wav",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/sfx/CompletedTask.wav"
+    },
+    {
+      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/sfx/LevelUp.wav",
+      "SourceId": "GamifyingTasks",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
+      "BasePath": "_content/GamifyingTasks",
+      "RelativePath": "sfx/LevelUp.wav",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/sfx/LevelUp.wav"
     }
   ]
 }

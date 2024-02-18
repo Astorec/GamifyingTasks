@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
 using GamifyingTasks.Firebase.DB;
 using Fluxor;
+using GamifyingTasks.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 DBCore.init();
@@ -10,7 +11,6 @@ DBCore.init();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-
 builder.Services.AddFluxor(o =>
 {
     o.ScanAssemblies(typeof(Program).Assembly);
@@ -38,5 +38,4 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();

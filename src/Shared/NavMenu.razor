@@ -16,6 +16,7 @@
     private void LogOut(){
         FirebaseAuth.GetClient().SignOut();
         DBCore.IsLoggedIn = false;
+        DBCore.Dispose();
         navManger.NavigateTo("/");
     }
 }
