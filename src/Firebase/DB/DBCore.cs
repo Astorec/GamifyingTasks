@@ -143,20 +143,23 @@ namespace GamifyingTasks.Firebase.DB
 
             CollectionReference coll = GetDBInstance().Collection("Events");
             QuerySnapshot docs = await coll.GetSnapshotAsync();
+            m_userEvents = new Dictionary<string, Events>();
             foreach (var doc in docs)
             {
-                var uid = doc.Id;
-                if (!m_allTasks.TryGetValue(uid, out var existingTask) && doc.GetValue<string>("UserId") == m_currentUser.Uid)
+                // get all events that match the userId 
+                if (doc.GetValue<string>("UserId") == CurrentLocalUser.Uid)
                 {
-                    Events eventToAdd = new Events
-                    {
-                        UID = uid,
-                        UserId = doc.GetValue<string>("UserId"),
-                        EventName = doc.GetValue<string>("EventName"),
-                        EventLocation = doc.GetValue<string>("EventLocation"),
-                        EventDate = doc.GetValue<Timestamp>("EventDate")
-                    };
-                    m_userEvents.Add(uid, eventToAdd);
+                    var uid = doc.Id;
+                 
+                        Events eventToAdd = new Events
+                        {
+                            UID = uid,
+                            UserId = doc.GetValue<string>("UserId"),
+                            EventName = doc.GetValue<string>("EventName"),
+                            EventLocation = doc.GetValue<string>("EventLocation"),
+                            EventDate = doc.GetValue<Timestamp>("EventDate")
+                        };
+                        m_userEvents.Add(uid, eventToAdd);
                 }
             }
 
@@ -412,22 +415,26 @@ namespace GamifyingTasks.Firebase.DB
 
             QuerySnapshot docs = await coll.GetSnapshotAsync();
             List<Events> ret = new List<Events>();
+
+            // Find all the events that are associated with the current user
             foreach (var doc in docs.Documents)
             {
                 if (doc.GetValue<string>("UserId") == CurrentLocalUser.Uid)
-                    ret.Add(new Events
+                {
+                    Events newEvent = new Events
                     {
                         UID = doc.Id,
                         UserId = doc.GetValue<string>("UserId"),
                         EventName = doc.GetValue<string>("EventName"),
-                        Description = doc.GetValue<string>("Description"),
                         EventLocation = doc.GetValue<string>("EventLocation"),
                         EventDate = doc.GetValue<Timestamp>("EventDate")
-
-                    });
-
-
+                    };
+                    ret.Add(newEvent);
+                }
             }
+
+
+    
 
             return ret;
         }

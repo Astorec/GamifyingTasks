@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "bNq6/9KtEfPZdQyWI3YKTj8PvtglHxIbN2/YVtHE3cw=",
+  "Hash": "l+zrl7LZpE/8YOfv7X1PxQuoS7mhEHGytB5IV0X/ZAw=",
   "Source": "GamifyingTasks",
   "BasePath": "_content/GamifyingTasks",
   "Mode": "Default",
@@ -338,23 +338,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/site.css"
-    },
-    {
-      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/TaskButtons.css",
-      "SourceId": "GamifyingTasks",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
-      "BasePath": "_content/GamifyingTasks",
-      "RelativePath": "css/TaskButtons.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/css/TaskButtons.css"
     },
     {
       "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/favicon.ico",
