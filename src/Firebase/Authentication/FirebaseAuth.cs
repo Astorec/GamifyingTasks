@@ -12,7 +12,7 @@ namespace GamifyingTasks.Firebase.Authentication
         {
             var config = new FirebaseAuthConfig
             {
-                ApiKey = " AIzaSyCvAMO3R39WnJmTlyHiRyUyCMRy0uiGejc ",
+                ApiKey = " ",
                 AuthDomain = "hons-project-f5a1e.firebaseapp.com",
                 Providers = new FirebaseAuthProvider[]{
                 new EmailProvider()
