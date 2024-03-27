@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj": {}
+    "/home/astorec/Documents/UWS/Hons Proj/GamifyingTasks/src/GamifyingTasks.csproj": {}
   },
   "projects": {
-    "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj": {
+    "/home/astorec/Documents/UWS/Hons Proj/GamifyingTasks/src/GamifyingTasks.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj",
+        "projectUniqueName": "/home/astorec/Documents/UWS/Hons Proj/GamifyingTasks/src/GamifyingTasks.csproj",
         "projectName": "GamifyingTasks",
-        "projectPath": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.csproj",
+        "projectPath": "/home/astorec/Documents/UWS/Hons Proj/GamifyingTasks/src/GamifyingTasks.csproj",
         "packagesPath": "/home/astorec/.nuget/packages/",
-        "outputPath": "/home/astorec/Documents/Repos/GamifyingTasks/src/obj/",
+        "outputPath": "/home/astorec/Documents/UWS/Hons Proj/GamifyingTasks/src/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/astorec/.nuget/NuGet/NuGet.Config"
@@ -111,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.419/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.420/RuntimeIdentifierGraph.json"
         }
       }
     }
