@@ -1,5 +1,7 @@
 ﻿﻿@using GamifyingTasks.Firebase.Authentication
 @using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
 @inject NavigationManager navManger
 <MudNavMenu Dense="true">
     <MudNavLink Href="home" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.House" >Home
@@ -14,9 +16,7 @@
 
 @code{
     private void LogOut(){
-        FirebaseAuth.GetClient().SignOut();
-        DBCore.IsLoggedIn = false;
-        DBCore.Dispose();
+        _users.LogOut();
         navManger.NavigateTo("/");
     }
 }

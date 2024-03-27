@@ -247,3 +247,4 @@
 /home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/obj/Debug/net6.0/GamifyingTasks.csproj.CopyComplete
 /home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/obj/Debug/net6.0/GamifyingTasks.genruntimeconfig.cache
 /home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/obj/Debug/net6.0/ref/GamifyingTasks.dll
+/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/bin/Debug/net6.0/Blazored.LocalStorage.dll

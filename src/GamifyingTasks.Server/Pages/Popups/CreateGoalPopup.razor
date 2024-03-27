@@ -1,5 +1,8 @@
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
+@inject IGoals _goals
 @inject NavigationManager navManger
 <MudDialog>
     <DialogContent>
@@ -84,13 +87,13 @@
         // Save the goal to the database
         var newGoal = new UserGoals()
             {
-                UserId = DBCore.CurrentUser().Uid,
+                UserId = _users.GetUser().Uid,
                 GoalName = goalName,
                 GoalLevel = levelRequired,
                 Reward = reward
             };
 
-        await DBCore.AddNewGoal(newGoal);
+        await _goals.CreateGoal(newGoal);
         MudDialog.Close(DialogResult.Ok(true));
     }
 }

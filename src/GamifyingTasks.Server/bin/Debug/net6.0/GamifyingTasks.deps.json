@@ -9,6 +9,7 @@
       "GamifyingTasks/1.0.0": {
         "dependencies": {
           "BlazorAnimate": "3.0.0",
+          "Blazored.LocalStorage": "4.5.0",
           "FirebaseAdmin": "2.4.0",
           "FirebaseAuthentication.net": "4.1.0",
           "FirebaseStorage.net": "1.0.3",
@@ -34,6 +35,17 @@
         },
         "runtime": {
           "lib/netstandard2.0/BlazorAnimate.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Blazored.LocalStorage/4.5.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.Web": "6.0.26"
+        },
+        "runtime": {
+          "lib/net6.0/Blazored.LocalStorage.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1409,6 +1421,13 @@
       "sha512": "sha512-IUX/IFdEKiQ5ncZ5/iVhaZynWL2dA04lH9ieza9JhBj/jJH8f2NwM6OqdJFm7RfkFdbkIH8t2Bxd/laZS2EXWQ==",
       "path": "blazoranimate/3.0.0",
       "hashPath": "blazoranimate.3.0.0.nupkg.sha512"
+    },
+    "Blazored.LocalStorage/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6nZuJwA7zNIKx83IsObiHXZb09ponJOpCClU3en+hI8ZFvrOKXeOw+H7TegQZQrvdR1n9fkrVkEBQZg8vx6ZTw==",
+      "path": "blazored.localstorage/4.5.0",
+      "hashPath": "blazored.localstorage.4.5.0.nupkg.sha512"
     },
     "FirebaseAdmin/2.4.0": {
       "type": "package",

@@ -1,6 +1,8 @@
 @page "/settings"
 @using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
 @inject NavigationManager navManger
+@inject IUsers _users
 <MudMainContent>
     <MudPaper>
         <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
@@ -18,13 +20,13 @@
     IList<IBrowserFile> files = new List<IBrowserFile>();
     private async Task UploadFiles(IBrowserFile file)
     {
-        await Data.UserProfilePicture.UploadNewPFP(file);
+        await Data.UserProfilePicture.UploadNewPFP(file, _users);
     }
 
     protected override async Task OnInitializedAsync()
     {
 
-        if (DBCore.CurrentUser() == null)
+        if (!_users.IsLoggedIn())
         {
             navManger.NavigateTo("/");
         }

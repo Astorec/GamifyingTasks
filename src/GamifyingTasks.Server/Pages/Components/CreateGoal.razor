@@ -1,16 +1,20 @@
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
+@inject IGoals _goals
 @inject NavigationManager navManger
 <div calss="d-flex flex-column gap-4">
     <div class="d-flex flex-row gap-5 justify-center">
         <div>
             <!-- Enter the goal Name -->
-            <MudTextField @bind-Value="goalName" Label="Goal Name" Variant="Variant.Filled" Required="true" RequiredError="Goal Name is Required" />
+            <MudTextField @bind-Value="goalName" Label="Goal Name" Variant="Variant.Filled" Required="true"
+                RequiredError="Goal Name is Required" />
         </div>
         <div>
             <!-- Enter the level required for the goal -->
             <MudTextField @bind-Value="levelRequired" Label="Level Required to reach goal" Variant="Variant.Filled"
-                InputType="InputType.Number" Required="true"/>
+                InputType="InputType.Number" Required="true" />
         </div>
 
     </div>
@@ -44,17 +48,21 @@
 { "Cinema", "Eating Out", "Takeaway", "New Game", "New Clothes", "Day Out"};
     private HashSet<string> SelectedRewards = new HashSet<string>();
 
-    protected override void OnInitialized()
-    {
 
-        if (DBCore.CurrentLocalUser == null)
-        {
-            navManger.NavigateTo("/login");
-        }
-        else if (DBCore.IsLoggedIn)
-        {
-            navManger.NavigateTo("/home");
-        }
+    protected override async Task OnInitializedAsync()
+    {
+         
+
+            if (!_users.IsLoggedIn())
+            {
+                navManger.NavigateTo("/");
+            }
+            else if (_users.IsLoggedIn())
+            {
+                navManger.NavigateTo("/home");
+            }
+        
+
     }
 
     // set the Selected Reward to the value of the MudSelect or the MudTextField if it is not empty
@@ -88,15 +96,14 @@
         // Save the goal to the database
         var newGoal = new UserGoals()
             {
-                UserId = DBCore.CurrentUser().Uid,
+                UserId = _users.GetUser().Uid,
                 GoalName = goalName,
                 GoalLevel = levelRequired,
                 Reward = reward
             };
 
-        await DBCore.AddNewGoal(newGoal);
+        await _goals.CreateGoal(newGoal);
 
-        DBCore.IsLoggedIn = true;
         navManger.NavigateTo("/home");
     }
 }

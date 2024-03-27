@@ -5,13 +5,15 @@ using GamifyingTasks.Firebase.DB;
 using Fluxor;
 using GamifyingTasks.Data;
 using GamifyingTasks.Firebase.DB.Interfaces;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add Services to the web application
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddFluxor(o =>
 {
     o.ScanAssemblies(typeof(Program).Assembly);
@@ -21,9 +23,13 @@ builder.Services.AddFluxor(o =>
       });
 });
 
-builder.Services.AddScoped<IDBCore>();
-builder.Services.AddScoped<IUsers>();
-builder.Services.AddScoped<ITasks>();
+// Add Custom Services
+builder.Services.AddScoped<IDBCore, DBCore>();
+builder.Services.AddScoped<IUsers, DBCoreUsers>();
+builder.Services.AddScoped<ITasks, DBCoreTasks>();
+builder.Services.AddScoped<IEvents, DBCoreEventsReminders>();
+builder.Services.AddScoped<IGoals, DBCoreGoals>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

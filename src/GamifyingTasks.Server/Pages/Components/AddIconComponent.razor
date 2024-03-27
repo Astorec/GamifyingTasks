@@ -5,6 +5,7 @@
 @using GamifyingTasks.Classes
 @using GamifyingTasks.Interfaces
 @inject NavigationManager navManger
+
 <div class="d-flex align-end justify-end">
     <MudIconButton Icon="@Icons.Material.Filled.AddCircle" aria-label="newItem" Size="Size.Large" Color="Color.Info"
         @onclick="ToggleAddPopup">
@@ -36,10 +37,8 @@
         var result = await dialog.Result;
         if (!result.Canceled)
         {
-            await DBCore.GetAllTasks();
             await TaskAdded.InvokeAsync(true);
         }
-
     }
 
     private async Task OpenAddNewEvent()
@@ -50,7 +49,6 @@
         var result = await dialog.Result;
         if (!result.Canceled)
         {
-            await DBCore.GetAllTasks();
             await EventAdded.InvokeAsync(true);
         }
 
@@ -64,4 +62,4 @@
 
         Console.WriteLine(viewAddButtons);
     }
-}
+}    =

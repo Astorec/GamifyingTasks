@@ -1,7 +1,10 @@
 @namespace GamifyingTasks.Pages.Popups
 @using GamifyingTasks.Classes
-@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.Authentication
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IEvents _events
 <MudDialog>
+    <!-- Dialog to create a new event -->
     <DialogContent>
         <MudTextField T="string" Label="Event Name" @bind-Value="nameTxt" Required="true"
             RequiredError="Field can't be empty" />
@@ -29,7 +32,7 @@
     MudDatePicker _picker;
     DateTime? date = DateTime.Today;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    Google.Cloud.Firestore.FirestoreDb db = DBCore.GetDBInstance();
+  
 
     private async Task Submit()
     {
@@ -41,13 +44,13 @@
                     EventName = nameTxt,
                     Description = descTxt,
                     EventLocation = locationTxt,
-                    UserId = DBCore.CurrentLocalUser.Uid
+                    UserId = FirebaseAuth.GetClient().User.Info.Uid
                 };
 
                 
                 newEvent.SetEventDate(date.Value.ToUniversalTime());
             
-            await DBCore.AddNewEvent(newEvent);
+            await _events.CreateEvent(newEvent);
             MudDialog.Close(DialogResult.Ok(true));
         }
     }

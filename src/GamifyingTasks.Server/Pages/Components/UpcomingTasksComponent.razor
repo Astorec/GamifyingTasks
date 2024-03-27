@@ -4,6 +4,9 @@
 @using GamifyingTasks.Classes
 @using GamifyingTasks.Pages.Popups
 @using GamifyingTasks.Data
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject ITasks _tasks
+@inject IUsers _users
 @inject IDialogService DialogService
 @inject NavigationManager navManger
 <MudPaper Elevation="1" Height="430px">
@@ -21,7 +24,7 @@
                         <MudText> Loading Content</MudText>
                     </div>
                 }
-                @if (upcomingTasks.Values.Count() <= 0 && !loading)
+                @if (upcomingTasks.Count() <= 0 && !loading)
                 {
                     <div class="d-flex justify-center mt-5">
 
@@ -31,23 +34,24 @@
                     </div>
                 }
                 <div Style="height: 430x; wdith: 75%; overflow-x: hidden; overflow-y: auto;">
-                    @if (upcomingTasks.Values.Count() > 0 && upcomingTasks != null && !loading)
+                    @if (upcomingTasks.Count() > 0 && upcomingTasks != null && !loading)
                     {
                         @foreach (var task in upcomingTasks)
                         {
-                            @if (task.Value.DueDate.ToDateTime().Date != new DateTime(9999, 12,
-                           31).ToUniversalTime().Date && task.Value.DueDate.ToDateTime().Date >=
+                            @if (task.DueDate.ToDateTime().Date != new DateTime(9999, 12,
+                           31).ToUniversalTime().Date && task.DueDate.ToDateTime().Date >=
                            DateTime.UtcNow.AddDays(1).Date
-                           && !task.Value.Completed)
+                           && !task.Completed)
                             {
                                 <MudGrid>
                                     <MudItem xs="3">
                                         <MudPaper class="d-flex d-sm-none align-center justify-center mt-1 ml-6" Elevation="0">
-                                            <MudButton Variant="Variant.Text" @onclick="() => ToggleViewDetails(task.Value)">
+                                            <MudButton Variant="Variant.Text" @onclick="() => ToggleViewDetails(task)">
                                                 <MudText Typo="Typo.body2">
-                                                    @task.Value.Name
+                                                    @task.Name
                                                 </MudText>
-                                                <MudPopover Open="@(SelectedTask == task.Value && viewTask)"
+                                                <!-- Display the task description if the task is clicked -->
+                                                <MudPopover Open="@(SelectedTask == task && viewTask)"
                                                     OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.BottomRight"
                                                     TransformOrigin="Origin.TopCenter" Paper="false">
                                                     <MudPaper>
@@ -56,6 +60,7 @@
                                                             <MudText>
                                                                 @SelectedTask.Description
                                                             </MudText>
+                                                            <!-- Display the due date if the task has a due date -->
                                                             @if (SelectedTask.DueDate != Timestamp.FromDateTime(new DateTime(9999, 12,
                                                            31).ToUniversalTime()))
                                                             {
@@ -80,11 +85,11 @@
                                         <MudPaper class="d-flex d-sm-none flex-row gap-2 jusitfy-end ml-6 mt-2" Elevation="0"
                                             Width="15%" Height="65%">
                                             <MudPaper Elevation="0">
-                                                <MudFab @onclick="() => CompleteTask(task.Value)" Size="Size.Small"
+                                                <MudFab @onclick="() => CompleteTask(task)" Size="Size.Small"
                                                     Color="Color.Success" StartIcon="@Icons.Material.Filled.Check" />
                                             </MudPaper>
                                             <MudPaper Elevation="0">
-                                                <MudFab Size="Size.Small" @onclick="() => DeleteTask(task.Key)" Color="Color.Error"
+                                                <MudFab Size="Size.Small" @onclick="() => DeleteTask(task.UID)" Color="Color.Error"
                                                     StartIcon="@Icons.Material.Filled.SkipNext" />
                                             </MudPaper>
                                         </MudPaper>
@@ -94,11 +99,11 @@
 
                                 <div class="d-none d-sm-flex flex-row gap-3 justify-space-between mt-3">
                                     <MudButton Variant="Variant.Text" Typo="Typo.body2"
-                                        @onclick="() => ToggleViewDetails(task.Value)">
+                                        @onclick="() => ToggleViewDetails(task)">
                                         <MudText>
-                                            @task.Value.Name
+                                            @task.Name
                                         </MudText>
-                                        <MudPopover Open="@(SelectedTask == task.Value && viewTask)"
+                                        <MudPopover Open="@(SelectedTask == task && viewTask)"
                                             OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.BottomRight"
                                             TransformOrigin="Origin.TopCenter" Paper="false">
                                             <MudPaper>
@@ -122,10 +127,10 @@
                                     </MudButton>
                                     <div class="d-flex align-end">
                                         <MudButtonGroup Color="Color.Success" Variant="Variant.Filled">
-                                            <MudButton Color="Color.Success" @onclick="() => CompleteTask(task.Value)"
+                                            <MudButton Color="Color.Success" @onclick="() => CompleteTask(task)"
                                                 Size="Size.Small">
                                                 Confirm</MudButton>
-                                            <MudButton Color="Color.Error" Size="Size.Small" @onclick="() => DeleteTask(task.Key)">
+                                            <MudButton Color="Color.Error" Size="Size.Small" @onclick="() => DeleteTask(task.UID)">
                                                 Skip</MudButton>
                                         </MudButtonGroup>
                                     </div>
@@ -148,27 +153,42 @@
 
     [Parameter]
     public EventCallback<bool> TaskCompleted { get; set; }
-
+    
+    private int lastCount = 0;
     private bool loading = true;
     private bool viewTask = false;
     public bool viewAddButtons = false;
     private Tasks? SelectedTask { get; set; }
-
-    private FirestoreDb db = DBCore.GetDBInstance();
-    public Dictionary<string, Tasks> upcomingTasks = new Dictionary<string, Tasks>();
-    protected override async Task OnInitializedAsync()
+    public List<Tasks> upcomingTasks = new List<Tasks>();
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (DBCore.CurrentUser() != null)
+        
+        if(firstRender)
         {
+            if (_users.GetUser() != null)
+            {        
+                await RefreshTaskList();
+            }
+        }
+        if(!firstRender && upcomingTasks.Count() <= 0)
+        {
+            lastCount = upcomingTasks.Count();
             await RefreshTaskList();
         }
+        else if(!firstRender && upcomingTasks.Count() > 0 && upcomingTasks.Count() != lastCount)
+        {
+            lastCount = upcomingTasks.Count();
+            await RefreshTaskList();
+        }
+ 
     }
     private string _menuConfirmText = "Confirm";
 
     public async Task RefreshTaskList()
     {
-        upcomingTasks = await GetUpcomingTasks();
-        if (upcomingTasks.Values.Count() > 0 && upcomingTasks != null)
+        upcomingTasks = _tasks.GetUpcomingTasks();
+        if (upcomingTasks.Count() > 0 && upcomingTasks != null)
         {
             await TaskUpdated.InvokeAsync(true);
         }
@@ -178,10 +198,7 @@
         }
 
     }
-    private async Task<Dictionary<string, Tasks>> GetUpcomingTasks()
-    {
-        return await DBCore.GetUserTasks(DBCore.TaskType.Upcoming);
-    }
+
     private void SetButtonText(int id)
     {
         switch (id)
@@ -217,13 +234,13 @@
 
     public async Task CompleteTask(Tasks task)
     {
-        await UserLevelCaluclations.TaskCompleted(task);
+        await UserLevelCaluclations.TaskCompleted(task, _tasks, _users);
         await TaskCompleted.InvokeAsync(true);
     }
 
     public async Task DeleteTask(string uid)
     {
-        await DBCore.DeleteTask(uid);
+        await _tasks.DeleteTask(uid);
         await RefreshTaskList();
     }
 

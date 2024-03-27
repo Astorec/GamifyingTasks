@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
 using FirebaseAdmin.Auth;
+using GamifyingTasks.Firebase.DB.Interfaces;
 
 namespace GamifyingTasks.Data
 {
     public static class UserProfilePicture
     {
-        public static async Task UploadNewPFP(IBrowserFile file)
+        public static async Task UploadNewPFP(IBrowserFile file, IUsers _users)
         {
             MemoryStream ms = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(ms);
@@ -33,16 +34,16 @@ namespace GamifyingTasks.Data
                     ("hons-project-f5a1e.appspot.com",
                     new FirebaseStorageOptions
                     {
-                        AuthTokenAsyncFactory = () => Task.FromResult(DBCore.CurrentUser().GetIdTokenAsync().Result),
+                        AuthTokenAsyncFactory = () => Task.FromResult(_users.GetUser().Uid),
                         ThrowOnCancel = true,
                     })
                                 .Child("ProfilePictures")
-                                .Child(DBCore.CurrentLocalUser.Uid)
+                                .Child(_users.GetUser().Uid)
                                 .PutAsync(ms);
                     var downloadUrl = await task;
                       Console.WriteLine($"Upload completed. Download URL: {downloadUrl}"); // Debugging output
-                    DBCore.CurrentLocalUser.PfpUrl = downloadUrl;
-                    await DBCore.UpdateUser(DBCore.CurrentLocalUser);
+                    _users.GetUser().PfpUrl = downloadUrl;
+                    await _users.UpdateUser(_users.GetUser());
                 }
             }
 

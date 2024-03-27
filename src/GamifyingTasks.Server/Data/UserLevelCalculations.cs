@@ -1,60 +1,96 @@
 using GamifyingTasks.Classes;
 using GamifyingTasks.Firebase.DB;
+using GamifyingTasks.Firebase.DB.Interfaces;
 namespace GamifyingTasks.Data
 {
     internal static class UserLevelCaluclations
     {
         private static int expCurve = 150; // The amount the EXP require for level up is increased by
-        private static float progress;
-        public static bool hasleveledUp = false;
+        private static float progress; // The progress of the user to the next level
+        private static Users currentUser; // The current user
+        public static bool hasleveledUp = false; // If the user has leveled up
+
+        /// <summary>
+        /// Calculate the EXP of the user
+        /// </summary>
+        /// <param name="difficulty"></param>
         private static void CalculateEXP(string difficulty)
         {
+            // Calculate the EXP based on the difficulty of the task
             switch (difficulty)
             {
                 case "Easy":
-                    DBCore.CurrentLocalUser.Exp = DBCore.CurrentLocalUser.Exp + 25;
+                    currentUser.Exp = currentUser.Exp + 25;
                     break;
                 case "Medium":
-                    DBCore.CurrentLocalUser.Exp = DBCore.CurrentLocalUser.Exp + 50;
+                   currentUser.Exp = currentUser.Exp + 50;
                     break;
                 case "Hard":
-                    DBCore.CurrentLocalUser.Exp = DBCore.CurrentLocalUser.Exp + 75;
+                    currentUser.Exp = currentUser.Exp + 75;
                     break;
                 case "Extra Hard":
-                    DBCore.CurrentLocalUser.Exp = DBCore.CurrentLocalUser.Exp + 100;
+                   currentUser.Exp = currentUser.Exp + 100;
                     break;
             }
 
-            if (DBCore.CurrentLocalUser.Exp >= DBCore.CurrentLocalUser.requiredExp)
+            // if the user has enough EXP to level up, level up the user and reset the EXP
+            if (currentUser.Exp >= currentUser.requiredExp)
             {
 
-                DBCore.CurrentLocalUser.Level = DBCore.CurrentLocalUser.Level + 1;
-                DBCore.CurrentLocalUser.requiredExp = DBCore.CurrentLocalUser.requiredExp + 150;
-                DBCore.CurrentLocalUser.Exp = 0;
+                currentUser.Level = currentUser.Level + 1;
+                currentUser.requiredExp = currentUser.requiredExp + 150;
+                currentUser.Exp = 0;
                 progress = 0;
                 hasleveledUp = true;
 
             }
         }
 
-        public static float CalculateProgress()
-        {
-            if (DBCore.CurrentLocalUser.Exp < DBCore.CurrentLocalUser.requiredExp)
+
+        /// <summary>
+        /// Calculate the progress of the user
+        /// </summary>
+        /// <param name="_users"></param>
+        /// <returns></returns>
+        public static float CalculateProgress(IUsers _users)
+        {  
+            // create a copy of the user
+            var temp = _users.GetUser();
+
+            // if the user has not leveled up, calculate the progress
+            if (temp.Exp < temp.requiredExp)
             {              
                 // Calculate accurate progress fraction
-                float fraction = Math.Min(DBCore.CurrentLocalUser.Exp / (float)DBCore.CurrentLocalUser.requiredExp, 1f);
+                float fraction = Math.Min(temp.Exp / (float)temp.requiredExp, 1f);
 
                 progress = (float)Math.Round(fraction * 100, 0); // Round to the nearest whole number after calculation
             }
-
+            
+            // return the progress
             return progress;
         }
-        public static async Task TaskCompleted(Tasks completedTask)
+
+
+        /// <summary>
+        /// TaskCompleted is called when a task is completed
+        /// </summary>
+        /// <param name="completedTask"></param>
+        /// <param name="_tasks"></param>
+        /// <param name="_users"></param>
+        /// <returns></returns>
+        public static async Task TaskCompleted(Tasks completedTask, ITasks _tasks, IUsers _users)
         {
+            // set the current user to a copy of the user
+            currentUser = _users.GetUser();
+
+            // Calculate the EXP of the user
             CalculateEXP(completedTask.Difficulty);
+            // Mark the task as completed
             completedTask.Completed = true;
-            await DBCore.UpdateTask(completedTask);
-            await DBCore.UpdateUser(DBCore.CurrentLocalUser);
+
+            // Update the task and the user
+            await _tasks.UpdateTask(completedTask);
+            await _users.UpdateUser(currentUser);
         }
 
     }

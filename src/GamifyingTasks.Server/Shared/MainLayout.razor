@@ -1,17 +1,19 @@
 ﻿@inherits LayoutComponentBase
 @using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
 @inject NavigationManager navManger
+@inject IUsers _users
 <MudLayout>
     
     <MudAppBar Elevation="0">
-        @if(DBCore.IsLoggedIn){
+        @if(_users.IsLoggedIn()){
          <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
             OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
     }
    
     </MudAppBar>
-        @if(DBCore.IsLoggedIn){
+        @if(_users.IsLoggedIn()){
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">HonsProject</MudText>
@@ -36,11 +38,7 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
-
     }
-
-    
-
 /*
     Color values
     #86ABC8 - Grey-ish Blue - TextSecondary, Surface
@@ -63,7 +61,7 @@
             Surface = "#507C9D",
             Info = "#002038",
             Success = "#507C9D",
-            Error = "#507C9D",
+          //  Error = "#507C9D",
             Divider = "#86ABC8"
 
         },

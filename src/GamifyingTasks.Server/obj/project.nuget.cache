@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "fppgXXA71ovaMajezglzO4W9S/JjUAhE8IKg2YiTuemVuMY6uMDzoKtziPToElpukKJnEHJWLAe7Pve8Osb7vQ==",
+  "dgSpecHash": "pw4nGh4b2LR9FO+I5PE4mTPCB7YNF0G0ZQKoCVxvTZT3NmawVjWV55Qop0U31URD5GMEkS2s5F/SjMPdQjTPrg==",
   "success": true,
   "projectFilePath": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/GamifyingTasks.csproj",
   "expectedPackageFiles": [
     "/home/astorec/.nuget/packages/blazoranimate/3.0.0/blazoranimate.3.0.0.nupkg.sha512",
+    "/home/astorec/.nuget/packages/blazored.localstorage/4.5.0/blazored.localstorage.4.5.0.nupkg.sha512",
     "/home/astorec/.nuget/packages/firebaseadmin/2.4.0/firebaseadmin.2.4.0.nupkg.sha512",
     "/home/astorec/.nuget/packages/firebaseauthentication.net/4.1.0/firebaseauthentication.net.4.1.0.nupkg.sha512",
     "/home/astorec/.nuget/packages/firebasestorage.net/1.0.3/firebasestorage.net.1.0.3.nupkg.sha512",
