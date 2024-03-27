@@ -1,0 +1,44 @@
+
+.mud-nav-theme{
+    background-color: #002038;
+    
+}
+
+.mud-nav-item{
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+
+}
+
+.mud-nav-item:first-of-type {
+    padding-top: 1rem;
+}
+
+.mud-nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
+
+.mud-nav-item a {
+    color: #86ABC8;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+}
+
+.mud-nav-item a.active {
+    /* Your styles for the selected item go here */
+    color: #275273!important;
+    background-color:#E9EEF2 !important;
+}
+
+.mud-nav-item a:hover {
+background-color: rgba(255,255,255,0.1);
+color: #E9EEF2;
+}
+
+.log-out-link {
+    color: #86ABC8!important;
+    background-color: #002038 !important;
+}
