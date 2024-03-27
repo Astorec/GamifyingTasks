@@ -1,0 +1,22 @@
+﻿﻿@using GamifyingTasks.Firebase.Authentication
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
+@inject NavigationManager navManger
+<MudNavMenu Dense="true">
+    <MudNavLink Href="home" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.House" >Home
+    </MudNavLink>
+    <MudNavLink Href="profile" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Person"> 
+        profile
+    </MudNavLink>
+    <MudNavLink Href="settings" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Settings">
+        Settings</MudNavLink>
+        <MudNavLink @onclick="LogOut" Match="NavLinkMatch.Prefix">Log Out</MudNavLink>
+</MudNavMenu>
+
+@code{
+    private void LogOut(){
+        _users.LogOut();
+        navManger.NavigateTo("/");
+    }
+}

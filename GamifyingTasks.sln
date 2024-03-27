@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamifyingTasks", "src\GamifyingTasks.csproj", "{7646C9C0-FE0A-487B-98DD-40E415B07578}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamifyingTasks", "src\GamifyingTasks.Server\GamifyingTasks.csproj", "{7646C9C0-FE0A-487B-98DD-40E415B07578}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

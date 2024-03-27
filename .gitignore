@@ -1,1 +1,6 @@
 src/google-cloud-cli-463.0.0-linux-x86_64.tar.gz
+src/GamifyingTasks.Server/~/.docker
+src/GamifyingTasks.Server/obj/Release
+src/GamifyingTasks.Server/obj/Release/net6.0
+src/GamifyingTasks.Server/obj/Debug
+src/GamifyingTasks.Server/obj/Debug/net6.0

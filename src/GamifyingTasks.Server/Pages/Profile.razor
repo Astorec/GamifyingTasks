@@ -1,0 +1,166 @@
+@page "/profile"
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Pages.Popups
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
+@inject IGoals _goals
+@inject ITasks _tasks
+@inject NavigationManager navManger
+@inject IDialogService DialogService
+
+<MudMainContent>
+    <MudGrid>
+        <MudItem xs="12" xl="30">
+            <div class="d-flex align-center justify-center">
+                <MudImage Src="@_users.GetUser().PfpUrl" class="mud-theme-primary rounded-circle col-span-1"
+                    Width="300" Height="300" />
+            </div>
+            <div class="d-flex align-center justify-center">
+                <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h4">
+                    <b>@_users.GetUser().UserName</b>
+                </MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12" xl="30">
+            <MudCard>
+                <MudCardContent class="d-flex flex-grow-1">
+                    <MudGrid class="flex-grow-1">
+                        <MudItem xs="12" xl="20" class="d-flex flex-column flex-grow-1 align-center justify-center">
+
+                            <div class="d-flex justify-content-between">
+                                <MudText class="align-content-start flex-grow-1" Typo="Typo.subtitle1"
+                                    Color="Color.Primary">
+                                    <b>Level - @_users.GetUser().Level</b>
+                                </MudText>
+                                <MudText class="align-content-end pl-16" Typo="Typo.subtitle1" Color="Color.Primary">
+                                    <b>@_users.GetUser().Exp/@_users.GetUser().requiredExp EXP</b>
+                                </MudText>
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" xl="12">
+                            <div>
+                                <MudProgressLinear Color="Color.Info" Size="Size.Large" Value="@progress">
+                                    <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+                                        <b>@progress%</b>
+                                    </MudText>
+                                </MudProgressLinear>
+                            </div>
+                        </MudItem>
+                        <MudItem xs="12" xl="12">
+                            <MudPaper class="d-flex flex-row justify-center" Elevation="0">
+                                <MudStack Spacing="16" Row="true">
+                                    <MudStack>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">Tasks Completed</MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @_tasks.GetCompletedTasks().Count()</MudPaper>
+                                    </MudStack>
+                                    <MudStack>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">Login Streak
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @_users.GetUser().LoginStreak</MudPaper>
+                                    </MudStack>
+                                    <MudStack>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">longest Streak
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">
+                                            @_users.GetUser().LongestStreak</MudPaper>
+                                    </MudStack>
+                                    <MudStack>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">Goals Met
+                                        </MudPaper>
+                                        <MudPaper Class="d-flex justify-center" Elevation="0">0</MudPaper>
+                                    </MudStack>
+                                </MudStack>
+                            </MudPaper>
+
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" xl="12">
+            <MudPaper Height="430px">
+                <MudCard Elevation="0">
+                    <MudCardContent class="d-flex flex-column flex-grow-1 justify-center">
+                        <div class="d-flex justify-center">
+                            <MudText><b>Personal Goals</b></MudText>
+                        </div>
+                        <div>
+                            <MudTable Items="@userGoals" Breakpoint="Breakpoint.None">
+                                <HeaderContent>
+                                    <MudTh>Name</MudTh>
+                                    <MudTh>Reward</MudTh>
+                                    <MudTh>Level Required</MudTh>
+                                </HeaderContent>
+
+                                <RowTemplate>
+                                    <MudTd>@context.GoalName</MudTd>
+                                    <MudTd>@context.Reward</MudTd>
+                                    <MudTd>@context.GoalLevel</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                        </div>
+                        <div class="d-flex justify-end">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OpenNewGoalDialog">New
+                                Goal</MudButton>
+                        </div>
+                    </MudCardContent>
+                </MudCard>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" xl="12">
+
+        </MudItem>
+    </MudGrid>
+</MudMainContent>
+@code {
+
+    private double progress = 0;
+    private List<UserGoals> userGoals = new List<UserGoals>();
+    
+protected override async Task OnInitializedAsync()
+    {
+        if (!_users.IsLoggedIn())
+        {
+            navManger.NavigateTo("/");
+        }
+        else
+        {
+            await DisplayUserGoals();
+            UpdateProgress();
+        }
+    }
+
+    private void UpdateProgress()
+    {
+        // Calculate accurate progress fraction
+        float fraction = Math.Min(_users.GetUser().Exp / (float)_users.GetUser().requiredExp, 1f);
+
+        progress = Math.Round(fraction * 100, 0); // Round to the nearest whole number after calculation
+        if (progress >= 100)
+        {
+            progress = 0;
+        }
+        StateHasChanged();
+    }
+
+    private async Task DisplayUserGoals()
+    {
+        // Display the users Goals
+        userGoals = _goals.GetGoals();
+        StateHasChanged();
+    }
+
+    private async Task OpenNewGoalDialog()
+    {
+        var parameters = new DialogParameters();
+        var dialog = DialogService.Show<CreateGoalPopup>("New Goal", parameters);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,97 @@
+@namespace GamifyingTasks.Pages.Popups
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
+@using GamifyingTasks.Firebase.Authentication
+@inject ITasks _task
+<MudDialog Class="mud-dialog-content">
+    <DialogContent>
+        <!-- Mud Form Added as this makes it easier to validate the form. The form refference is used to call it in the code block-->
+        <MudForm @ref="form">
+            <!-- Each text field has a Required attribute which is used to validate the form. The RequiredError is used to display a message if the field is empty-->
+            <MudTextField T="string" Label="Task Name" @bind-Value="nameTxt" Required="true"
+                RequiredError="Field can't be empty" />
+            <MudTextField T="string" Label="Task Description" @bind-Value="descTxt" AutoGrow Lines="5" Required="true"
+                RequiredError="Field can't be empty" />
+            <!-- MudSelect is used to create a dropdown menu. The @bind-Value is used to bind the selected value to a variable. 
+            The Required attribute is used to validate the form. The RequiredError is used to display a message if the field is empty-->
+            <MudSelect T="string" Label="Task Difficulty" AnchorOrigin="Origin.BottomCenter" @bind-Value="difficultyTxt"
+                Required="true" RequiredError="Select a Difficulty">
+                <MudSelectItem Value="@("Easy")" />
+                <MudSelectItem Value="@("Medium")" />
+                <MudSelectItem Value="@("Hard")" />
+                <MudSelectItem Value="@("Extra Hard")" />
+            </MudSelect>
+            <!-- MudSwitch is used to create a toggle switch. The @bind-Value is used to bind the selected value to a variable. -->
+            <MudSwitch @bind-Value="@hasDueDate" Colour="Color.Info" Label="Toggle Due Date" />
+            <MudDatePicker @ref="_picker" label="Select Date" @bind-Date="date" Disabled="@hasDueDate">
+                <PickerActions>
+                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                    <MudButton OnClick="@(() => _picker.Close(false))">Cancel</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(() => _picker.Close())">Ok</MudButton>
+                </PickerActions>
+            </MudDatePicker>
+        </MudForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    //This is used to check if the user has selected a due date or not
+    private bool hasDueDate = true;
+
+    //This is used to get the form reference
+    MudForm form;
+    //This is used to get the date picker reference
+    MudDatePicker _picker;
+    //This is used to get the date picker reference
+    DateTime? date = DateTime.Today;
+    //This is used to get the dialog reference
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+/// <summary>
+/// This method is used to submit the form. It first validates the form and then creates a new task and adds it to the database
+/// </summary>
+    private async Task Submit()
+    {
+        // Wait for the form to validate
+        await form.Validate();
+
+        // If it is valid we can add the task to the database
+        if (form.IsValid)
+        {
+
+            Tasks task = new Tasks
+                {
+                    Name = nameTxt,
+                    Description = descTxt,
+                    Difficulty = difficultyTxt,
+                    UserId = FirebaseAuth.GetClient().User.Info.Uid
+                };
+
+            // We check to see if the user has selected a due date or not. If not we set a default date
+            if (!hasDueDate && date.HasValue)
+            {
+                task.SetDueDate(date.Value.ToUniversalTime());
+            }
+            else
+                task.SetDueDate(new DateTime(9999, 12, 31).ToUniversalTime());
+            
+            // Add the new task to the DB
+            await _task.CreateTask(task);
+
+            // Close the Dialog
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+    public string nameTxt;
+    public string descTxt;
+    public string difficultyTxt;
+}

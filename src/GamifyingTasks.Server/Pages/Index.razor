@@ -1,0 +1,179 @@
+﻿@page "/home"
+
+@using Google.Cloud.Firestore
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Classes
+@using GamifyingTasks.Pages.Components
+@using GamifyingTasks.Interfaces
+@using GamifyingTasks.Data
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject ITasks _tasks
+@inject IEvents _events
+@inject IUsers _users
+@inject IDialogService DialogService
+@inject NavigationManager navManger
+@inject IJSRuntime js
+<MudMainContent>
+    <div class="d-flex relative  align-start justify-center" Width="575px">
+
+        <MudGrid Spacing="2">
+            <MudItem xs="12" xl="30">
+                <MudPaper Elevation="1">
+                    <MudCard>
+                        <MudCardContent class="d-flex flex-grow-1">
+                            <MudGrid class="flex-grow-1">
+                                <MudItem xs="12" xl="20"
+                                    class="d-flex flex-column flex-grow-1 align-center justify-center">
+                                    <!-- Display the User's Profile Picture and Name -->
+                                    <div class="d-flex">
+                                        <MudImage Src="@_users.GetUser().PfpUrl"
+                                            class="mud-theme-primary rounded-circle col-span-1" Width="95"
+                                            Height="95" />
+                                    </div>
+                                    <div class="d-flex">
+                                        <MudText Align="Align.Center" Color="Color.Primary">
+                                            <b>@_users.GetUser().UserName</b>
+                                        </MudText>
+                                    </div>
+
+                                </MudItem>
+                                <MudItem xs="12" xl="12">
+                                    <!-- Display the User's Level and Progress -->
+                                    <div class="d-flex justify-content-between">
+                                        <MudText class="align-content-start flex-grow-1" Typo="Typo.subtitle1"
+                                            Color="Color.Primary">
+                                            <b>Level - @_users.GetUser().Level</b>
+                                        </MudText>
+                                        <MudText class="align-content-end pl-16" Typo="Typo.subtitle1"
+                                            Color="Color.Primary">
+                                            <b>@_users.GetUser().Exp/@_users.GetUser().requiredExp EXP</b>
+                                        </MudText>
+                                    </div>
+                                    <div>
+                                        <MudProgressLinear Color="Color.Info" Size="Size.Large" Value="@progress">
+                                            <MudText Typo="Typo.subtitle1" Color="Color.Primary">
+                                                <b>@progress%</b>
+                                            </MudText>
+                                        </MudProgressLinear>
+                                    </div>
+                                </MudItem>
+                            </MudGrid>
+                        </MudCardContent>
+                    </MudCard>
+                </MudPaper>
+
+            </MudItem>
+            <!-- Display the User's Tasks for Today -->
+            <MudItem xs="6" xl="15">
+                <TodaysTasksComponent @ref="todaysTasksComponent" TaskUpdated="@TasksUpdated"
+                    TaskCompleted="@TaskCompleted" />
+            </MudItem>
+            <!-- Display the User's Upcoming Tasks -->
+            <MudItem xs="6" xl="15">
+                <UpcomingTasksComponent @ref="upcomingTasksComponent" TaskUpdated="@TasksUpdated" />
+            </MudItem>
+            <MudItem xs="12" xl="16">
+                <EventsRemindersComponent @ref="eventsRemindersComponent" />
+                <div class="d-flex justify-end">
+                    <AddIconComponent TaskAdded="@TaskAdded" />
+                </div>
+            </MudItem>
+        </MudGrid>
+        @if (shouldShowLevelUp)
+        {
+            <div class="level-up-animation" Elevation="0">
+
+                <MudText Typo="Typo.h3" Color="Color.Primary">
+                    Level Up!
+                </MudText>
+            </div>
+        }
+
+    </div>
+
+
+</MudMainContent>
+
+<style>
+    .popup-style {
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+@code {
+    private UpcomingTasksComponent upcomingTasksComponent;
+    private TodaysTasksComponent todaysTasksComponent;
+    private EventsRemindersComponent eventsRemindersComponent;
+    private bool loading = true;
+    private bool shouldShowLevelUp = false;
+    private bool userLeveledUp;
+    private double progress;
+
+    protected override async Task OnInitializedAsync()
+{
+        if (!_users.IsLoggedIn())
+        {
+            navManger.NavigateTo("/");
+        }
+        else
+        {
+            await _tasks.InitTasks();
+            progress = UserLevelCaluclations.CalculateProgress(_users);
+            StateHasChanged();
+        }
+    
+}
+
+
+
+    private string _menuConfirmText = "Confirm";
+
+
+    private void TasksUpdated(bool hasUpdated)
+    {
+        StateHasChanged();
+    }
+
+    private async Task TaskAdded(bool taskAdded)
+    {
+        await todaysTasksComponent.RefreshTaskList();
+        await upcomingTasksComponent.RefreshTaskList();
+        StateHasChanged();
+    }
+
+    private async Task TaskCompleted(bool TaskCompsleted)
+    {
+        progress = UserLevelCaluclations.CalculateProgress(_users);
+        if (!UserLevelCaluclations.hasleveledUp)
+            await TaskCompleteAudio();
+        else
+        {
+            shouldShowLevelUp = true;
+            await LevelUpAudio();
+            await InvokeAsync(() => StateHasChanged());
+            await Task.Delay(2000);
+            shouldShowLevelUp = false;
+            UserLevelCaluclations.hasleveledUp = false;
+
+        }
+
+
+        await todaysTasksComponent.RefreshTaskList();
+        await upcomingTasksComponent.RefreshTaskList();
+        eventsRemindersComponent.RefreshList();
+
+        StateHasChanged();
+    }
+
+    private async Task TaskCompleteAudio()
+    {
+        await js.InvokeVoidAsync("playCompletionSound");
+
+    }
+
+    private async Task LevelUpAudio()
+    {
+        await js.InvokeVoidAsync("playLevelUpSound");
+    }
+
+}

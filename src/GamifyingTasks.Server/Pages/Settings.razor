@@ -1,0 +1,51 @@
+@page "/settings"
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject NavigationManager navManger
+@inject IUsers _users
+<MudMainContent>
+    <MudPaper class="d-flex flex-column gap-3 align-center">
+
+        <div>
+            <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+                <ButtonTemplate>
+                    <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                        StartIcon="@Icons.Material.Filled.CloudUpload" for="@context.Id">
+                        Change Profile Picture
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+        </div>
+        <div>
+         <MudButton Variant="Variant.Filled" Color="Color.Primary">
+                <MudText>
+                    About This App
+                </MudText>
+            </MudButton>
+        </div>
+        <div>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">
+                <MudText>
+                    Delete Account
+                </MudText>
+            </MudButton>
+        </div>
+    </MudPaper>
+</MudMainContent>
+@code
+{
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private async Task UploadFiles(IBrowserFile file)
+    {
+        await Data.UserProfilePicture.UploadNewPFP(file, _users);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (!_users.IsLoggedIn())
+        {
+            navManger.NavigateTo("/");
+        }
+    }
+}

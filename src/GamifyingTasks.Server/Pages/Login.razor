@@ -1,0 +1,126 @@
+@page "/"
+@inject NavigationManager NavManager
+@using GamifyingTasks.Firebase.DB
+@using GamifyingTasks.Firebase.Authentication
+@using Google.Cloud.Firestore
+@using GamifyingTasks.Firebase.DB.Interfaces
+@inject IUsers _users
+<MudMainContent>
+    <MudTabs>
+        <MudTabPanel Text="Login">
+            <!--Login Form-->
+            <MudForm @onsubmit="HandleLogin">
+                <MudTextField Label="Email" @bind-Value="email" T="string" Required="true"
+                    RequiredError="Please enter your e-mail" />
+                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="pass" T="string" Required="true"
+                    RequiredError="Please enter your password" Password />
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Login</MudButton>
+            </MudForm>
+        </MudTabPanel>
+        <!--Register Form-->
+        <MudTabPanel Text="Register">
+            <MudForm @onsubmit="HandleRegister">
+                <MudTextField Label="Username" @bind-Value="regUserName" T="string" Required="true" 
+                RequiredError="Please enter a Username"/>
+                <MudTextField Label="Email" @bind-Value="regEmail" T="string" Required="true" 
+                RequiredError="Please enter an e-mail address"/>
+                <MudTextField Label="Password" InputType="@PasswordInput" @bind-Value="regPass" T="string" Required="true"
+                   RequiredError="Please enter a Password" Password />
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit">Register</MudButton>
+            </MudForm>
+
+        </MudTabPanel>
+    </MudTabs>
+</MudMainContent>
+
+
+@code {
+    //InputType for password field
+    InputType PasswordInput = InputType.Password;
+
+    // Variables for login
+    private string email, pass;
+
+    // Variables for register
+    private string regEmail, regPass, regConfirmPass, regUserName;
+
+    // Error message toggle
+    private bool displayError = false;
+
+    /// <summary>
+    /// Handles the login process
+    /// </summary>
+    private async Task HandleLogin()
+    {
+        // Check if email and password are not empty
+        if (email != "" && pass != "")
+        {
+            try
+            {
+                // Use the FirebaseAuth Client instance to sign in the user
+                var currentUser = await FirebaseAuth.GetClient().SignInWithEmailAndPasswordAsync(email, pass);
+                
+                // Set the user in the users service
+                await _users.Login(currentUser.User);                
+
+                // Navigate to the home page
+                NavManager.NavigateTo("/home");
+               StateHasChanged();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HandleLogin(): {ex.Message}\n\nStack Trace: {ex.StackTrace}");
+            }
+
+
+        }
+    }
+
+    /// <summary>
+    /// Handles the registration process
+    /// </summary>
+    private async Task HandleRegister()
+    {
+        // Check if email, password and username are not empty
+        if (regUserName != "" && regEmail != "" && regPass != "")
+            try
+            {
+                // Use the FirebaseAuth Client instance to create a new user
+                var regUser = await FirebaseAuth.GetClient().CreateUserWithEmailAndPasswordAsync(regEmail, regPass, regUserName);
+
+                //  Sign in with the new user details
+                var currentUser = await FirebaseAuth.GetClient().SignInWithEmailAndPasswordAsync(regEmail, regPass);
+
+                // Create the new user
+                var newUser = new Classes.Users
+                    {
+                        Uid = currentUser.User.Uid,
+                        UserName = regUserName,
+                        Email = regEmail,
+                        DayReg = Timestamp.FromDateTime(DateTime.UtcNow),
+                        Level = 1,
+                        Exp = 0,
+                        requiredExp = 200,
+                        LastLogin = Timestamp.FromDateTime(DateTime.UtcNow),
+                        LoginStreak = 1,
+                        LongestStreak = 1,
+                        PfpUrl = ""
+                    };
+
+                // Add the new user to the database
+                await _users.CreateUser(newUser);
+
+                NavManager.NavigateTo("/newUser");
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HandleRegister(): {ex.Message}\n\nStack Trace: {ex.StackTrace}");
+            }
+        }
+    }
+
+
+}
