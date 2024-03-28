@@ -10,5 +10,6 @@ namespace GamifyingTasks.Firebase.DB.Interfaces
         public Task InitEvents();
         public List<Events> GetTodaysEvents();
         public List<Events> GetUpcomingEvents();
+        public List<Events> GetAllEvents();
     }
 }

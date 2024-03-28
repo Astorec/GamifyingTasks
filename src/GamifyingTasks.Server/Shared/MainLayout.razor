@@ -3,8 +3,7 @@
 @using GamifyingTasks.Firebase.DB.Interfaces
 @inject NavigationManager navManger
 @inject IUsers _users
-<MudLayout>
-    
+<MudLayout>    
     <MudAppBar Elevation="0">
         @if(_users.IsLoggedIn()){
          <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"

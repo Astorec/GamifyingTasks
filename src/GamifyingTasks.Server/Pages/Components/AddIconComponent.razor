@@ -3,7 +3,6 @@
 @using Google.Cloud.Firestore;
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
-@using GamifyingTasks.Interfaces
 @inject NavigationManager navManger
 
 <div class="d-flex align-end justify-end">
@@ -49,6 +48,7 @@
         var result = await dialog.Result;
         if (!result.Canceled)
         {
+            Console.WriteLine("Event Added");
             await EventAdded.InvokeAsync(true);
         }
 

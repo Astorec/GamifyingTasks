@@ -44,27 +44,36 @@
 </MudPaper>
 
 @code {
+
+    [Parameter]
+    public EventCallback<bool> EventUpdated { get; set; } // Call back to index page to update the task list
     private List<Events> userEvents = new List<Events>();
     private bool loading = true;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+   protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
-        {
-
-            await _events.InitEvents();
-            if (loading)
-            {
-                Console.WriteLine("Loading events");
-                await RefreshList();
-                loading = false;
-            }
-            await InvokeAsync(() => StateHasChanged());
+        if (_users.IsLoggedIn())
+        {        
+            await RefreshList();
+            StateHasChanged();
         }
     }
-
     public async Task RefreshList()
     {
-        userEvents = _events.GetUpcomingEvents();
+        userEvents = _events.GetAllEvents();
+
+        if (userEvents.Count > 0 && userEvents != null)
+        {
+            await EventUpdated.InvokeAsync(true);
+        }
+
+        if (loading)
+        {
+            loading = false;
+        }
+
+        // Refresh the state of the component
+        await InvokeAsync(() => StateHasChanged());
+
     }
 }

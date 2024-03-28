@@ -4,7 +4,6 @@
 @using GamifyingTasks.Firebase.DB
 @using GamifyingTasks.Classes
 @using GamifyingTasks.Pages.Components
-@using GamifyingTasks.Interfaces
 @using GamifyingTasks.Data
 @using GamifyingTasks.Firebase.DB.Interfaces
 @inject ITasks _tasks
@@ -73,9 +72,9 @@
                 <UpcomingTasksComponent @ref="upcomingTasksComponent" TaskUpdated="@TasksUpdated" />
             </MudItem>
             <MudItem xs="12" xl="16">
-                <EventsRemindersComponent @ref="eventsRemindersComponent" />
+                <EventsRemindersComponent @ref="eventsRemindersComponent" EventUpdated="@EventsUpdated" />
                 <div class="d-flex justify-end">
-                    <AddIconComponent TaskAdded="@TaskAdded" />
+                    <AddIconComponent TaskAdded="@TaskAdded" EventAdded="@EventAdded"/>
                 </div>
             </MudItem>
         </MudGrid>
@@ -118,18 +117,24 @@
         else
         {
             await _tasks.InitTasks();
+            await _events.InitEvents();
             progress = UserLevelCaluclations.CalculateProgress(_users);
             StateHasChanged();
         }
     
 }
 
-
-
     private string _menuConfirmText = "Confirm";
 
 
     private void TasksUpdated(bool hasUpdated)
+    {
+        StateHasChanged();
+    }
+
+
+
+    private void EventsUpdated(bool hasUpdated)
     {
         StateHasChanged();
     }
@@ -140,6 +145,14 @@
         await upcomingTasksComponent.RefreshTaskList();
         StateHasChanged();
     }
+
+        private async Task EventAdded(bool eventAdded)
+    {
+        await  eventsRemindersComponent.RefreshList();
+        StateHasChanged();
+    }
+
+
 
     private async Task TaskCompleted(bool TaskCompsleted)
     {
@@ -160,7 +173,7 @@
 
         await todaysTasksComponent.RefreshTaskList();
         await upcomingTasksComponent.RefreshTaskList();
-        eventsRemindersComponent.RefreshList();
+        await eventsRemindersComponent.RefreshList();
 
         StateHasChanged();
     }

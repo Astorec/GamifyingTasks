@@ -36,6 +36,7 @@
 
     private async Task Submit()
     {
+        Console.WriteLine("Submit");
         if (nameTxt != null && descTxt != null && locationTxt != null)
         {
 
@@ -50,7 +51,9 @@
                 
                 newEvent.SetEventDate(date.Value.ToUniversalTime());
             
+            Console.WriteLine("Adding event");
             await _events.CreateEvent(newEvent);
+
             MudDialog.Close(DialogResult.Ok(true));
         }
     }

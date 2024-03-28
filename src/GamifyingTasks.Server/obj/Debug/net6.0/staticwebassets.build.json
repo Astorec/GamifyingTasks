@@ -1,10 +1,6 @@
 {
   "Version": 1,
-<<<<<<< HEAD:src/GamifyingTasks.Server/obj/Debug/net6.0/staticwebassets.build.json
   "Hash": "A86UPNLTlZYXXgf/75+I/Mc7dExL70HVpZVb/0F3TqM=",
-=======
-  "Hash": "l+zrl7LZpE/8YOfv7X1PxQuoS7mhEHGytB5IV0X/ZAw=",
->>>>>>> main:src/obj/Debug/net6.0/staticwebassets.build.json
   "Source": "GamifyingTasks",
   "BasePath": "_content/GamifyingTasks",
   "Mode": "Default",
@@ -157,28 +153,7 @@
       "OriginalItemSpec": "wwwroot/css/bootstrap/bootstrap.min.css.map"
     },
     {
-<<<<<<< HEAD:src/GamifyingTasks.Server/obj/Debug/net6.0/staticwebassets.build.json
       "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/wwwroot/css/open-iconic/FONT-LICENSE",
-=======
-      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/NavMenu.css",
-      "SourceId": "GamifyingTasks",
-      "SourceType": "Discovered",
-      "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/",
-      "BasePath": "_content/GamifyingTasks",
-      "RelativePath": "css/NavMenu.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/css/NavMenu.css"
-    },
-    {
-      "Identity": "/home/astorec/Documents/Repos/GamifyingTasks/src/wwwroot/css/open-iconic/FONT-LICENSE",
->>>>>>> main:src/obj/Debug/net6.0/staticwebassets.build.json
       "SourceId": "GamifyingTasks",
       "SourceType": "Discovered",
       "ContentRoot": "/home/astorec/Documents/Repos/GamifyingTasks/src/GamifyingTasks.Server/wwwroot/",

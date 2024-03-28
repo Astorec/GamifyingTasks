@@ -13,23 +13,34 @@ using GamifyingTasks.Firebase.DB.Interfaces;
 namespace GamifyingTasks.Data
 {
     public static class UserProfilePicture
-    {
+    {  
+        /// <summary>
+        /// UploadNewPFP uploads a new profile picture to the database
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="_users"></param>
+        /// <returns></returns>
         public static async Task UploadNewPFP(IBrowserFile file, IUsers _users)
         {
+            // Create a memory stream to store the image
             MemoryStream ms = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(ms);
             var bytes = ms.ToArray();
 
-
+            // Load the image
             using (var image = SixLabors.ImageSharp.Image.Load(bytes))
             {
+                // Resize the image if it is too large
                 if (image.Width > 200 || image.Height > 200)
                 {
                     var newImage = image.Clone(x => x.Resize(200, 200));
 
+                    // Save the image as a PNG
                     ms = new MemoryStream();
                     newImage.SaveAsPng(ms);
                     ms.Position = 0;
+
+                    // Upload the image to the database
                     var task = new FirebaseStorage
                     ("hons-project-f5a1e.appspot.com",
                     new FirebaseStorageOptions
@@ -48,11 +59,5 @@ namespace GamifyingTasks.Data
             }
 
         }
-
-        public static async Task GetPFP()
-        {
-
-        }
-
     }
 }

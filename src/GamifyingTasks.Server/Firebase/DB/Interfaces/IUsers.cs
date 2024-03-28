@@ -10,6 +10,5 @@ namespace GamifyingTasks.Firebase.DB.Interfaces{
         public Task Login(User user);
         public Task LogOut();
         public Task<Users> DeleteUser(string uid);
-        public bool CheckIfNew();
     }
 }
